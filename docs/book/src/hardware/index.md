@@ -1,6 +1,6 @@
 # Hardware — Overview
 
-ZeroClaw's hardware subsystem lets the agent control microcontrollers, SBCs, and peripherals directly. Enable with `--features hardware`.
+QuantClaw's hardware subsystem lets the agent control microcontrollers, SBCs, and peripherals directly. Enable with `--features hardware`.
 
 ## What's supported
 

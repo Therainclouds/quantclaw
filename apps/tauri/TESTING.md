@@ -14,17 +14,17 @@ bash dev/run-tauri-dev.sh
 `tccutil reset` only matches by bundle id, which is set on the `.app`, not the dev binary. For real fresh-permission tests, build the `.app` first:
 ```sh
 cd apps/tauri && cargo tauri build
-cp -R target/release/bundle/macos/ZeroClaw.app /Applications/
-xattr -dr com.apple.quarantine /Applications/ZeroClaw.app
+cp -R target/release/bundle/macos/QuantClaw.app /Applications/
+xattr -dr com.apple.quarantine /Applications/QuantClaw.app
 tccutil reset All ai.zeroclawlabs.desktop
-open /Applications/ZeroClaw.app
+open /Applications/QuantClaw.app
 ```
 
 ### What to verify in the wizard
 - 8 steps render with progress dots
 - Each Grant button either opens the right System Settings pane (deep-link via `x-apple.systempreferences:`) or fires the native macOS prompt (Screen Recording, Microphone, Camera, Input Monitoring)
 - Status pills flip to Granted within 2s of toggling in System Settings (driven by the 2s polling loop in `onboarding/index.html`)
-- "Start ZeroClaw" closes onboarding, opens the main dashboard window pointed at the gateway, and fires `POST /api/devices/me/capabilities` (best-effort)
+- "Start QuantClaw" closes onboarding, opens the main dashboard window pointed at the gateway, and fires `POST /api/devices/me/capabilities` (best-effort)
 - Quit + relaunch → wizard does not reappear; only the tray icon
 
 ### Known macOS-only pieces
@@ -105,7 +105,7 @@ Today the gateway's `POST /api/devices/me/capabilities` is implemented in this b
 # Run a local gateway from this branch
 cargo run -p zeroclaw -- gateway
 
-# In another terminal, walk the wizard, click "Start ZeroClaw"
+# In another terminal, walk the wizard, click "Start QuantClaw"
 # Then query the local devices.db (path depends on workspace config):
 sqlite3 <workspace>/devices.db "SELECT id, capabilities FROM devices;"
 # Expected: one row with a JSON array of granted permission names.

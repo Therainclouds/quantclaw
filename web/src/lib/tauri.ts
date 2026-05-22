@@ -1,4 +1,4 @@
-// Tauri detection utilities for ZeroClaw Desktop.
+// Tauri detection utilities for QuantClaw Desktop.
 
 declare global {
   interface Window {

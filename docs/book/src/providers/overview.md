@@ -1,6 +1,6 @@
 # Model Providers — Overview
 
-Model providers are ZeroClaw's abstraction over any LLM endpoint the agent can call. Every chat-completion request goes through a `ModelProvider` trait implementation (`zeroclaw-api::ModelProvider`), whether the target is a remote API, a self-hosted inference server, or a local Ollama model.
+Model providers are QuantClaw's abstraction over any LLM endpoint the agent can call. Every chat-completion request goes through a `ModelProvider` trait implementation (`zeroclaw-api::ModelProvider`), whether the target is a remote API, a self-hosted inference server, or a local Ollama model.
 
 Why "model" provider? We use the phrase "model provider" consistently — there are also TTS providers and transcription providers, and keeping the qualifier specific avoids ambiguity.
 

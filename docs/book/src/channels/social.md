@@ -87,4 +87,4 @@ tools_allow = ["http", "web_search"]      # whitelist — no shell, no file_writ
 
 ## Rate limits and backoff
 
-All social channels are subject to aggressive rate limits. ZeroClaw's outbound queue uses exponential backoff on 429 responses. If you hit persistent rate-limiting, lower `draft_update_interval_ms` and check whether you're accidentally editing messages (Bluesky does not support edits; others have per-operation limits).
+All social channels are subject to aggressive rate limits. QuantClaw's outbound queue uses exponential backoff on 429 responses. If you hit persistent rate-limiting, lower `draft_update_interval_ms` and check whether you're accidentally editing messages (Bluesky does not support edits; others have per-operation limits).

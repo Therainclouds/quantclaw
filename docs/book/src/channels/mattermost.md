@@ -81,7 +81,7 @@ Mattermost classifies channels by `type`:
 | `G` | Group direct message (multi-user DM). |
 | `D` | Direct message (1:1). |
 
-`G` and `D` are treated identically by ZeroClaw: both carry no `team_id`, both are gated by `discover_dms`, and both implicitly bypass `mention_only` (a private conversation has no ambient noise to filter against).
+`G` and `D` are treated identically by QuantClaw: both carry no `team_id`, both are gated by `discover_dms`, and both implicitly bypass `mention_only` (a private conversation has no ambient noise to filter against).
 
 Authorization for DM senders still goes through the channel's peer-group resolver, same as any other channel. `discover_dms` is a knob, not a security boundary; peer groups decide who is allowed to address the agent.
 
@@ -107,7 +107,7 @@ When `[transcription]` is configured and an inbound post has an audio attachment
 ## Setup
 
 1. In Mattermost: **System Console → Integrations → Bot Accounts → Add Bot Account**. Set a username (e.g. `zeroclaw`), enable the scopes you want.
-2. Copy the access token. Store it in your ZeroClaw secrets backend.
+2. Copy the access token. Store it in your QuantClaw secrets backend.
 3. Invite the bot to whichever teams you want it active in. For DM auto-discovery, no extra invites needed: any user can DM the bot.
 4. Add `[channels.mattermost.<alias>]` to your config.toml referencing the token.
 5. Bind the channel to an agent in `[agents.<alias>]` via `channels = ["mattermost.<alias>"]`.

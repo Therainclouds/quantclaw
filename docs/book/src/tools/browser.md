@@ -1,10 +1,10 @@
 # Browser Automation
 
-This guide covers setting up browser automation capabilities in ZeroClaw, including both headless automation and GUI access via VNC.
+This guide covers setting up browser automation capabilities in QuantClaw, including both headless automation and GUI access via VNC.
 
 ## Overview
 
-ZeroClaw supports multiple browser access methods:
+QuantClaw supports multiple browser access methods:
 
 | Method | Use Case | Requirements |
 |--------|----------|--------------|
@@ -25,7 +25,7 @@ agent-browser install --with-deps  # Linux (includes system deps)
 agent-browser install              # macOS/Windows
 ```
 
-### 2. Verify ZeroClaw Config
+### 2. Verify QuantClaw Config
 
 The browser tool is enabled by default with `allowed_domains = ["*"]`. Restrict domains or disable it via `zeroclaw config set`:
 
@@ -144,7 +144,7 @@ agent-browser screenshot /tmp/test.png
 agent-browser close
 ```
 
-### ZeroClaw Integration Tests
+### QuantClaw Integration Tests
 
 ```bash
 # Content extraction

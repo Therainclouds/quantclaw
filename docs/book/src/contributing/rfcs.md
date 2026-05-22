@@ -1,6 +1,6 @@
 # RFC Process
 
-Substantial changes to ZeroClaw's architecture, user-facing surface, or core policies go through an RFC before implementation. The process exists to surface design trade-offs, give maintainers and contributors a chance to push back early, and leave a searchable record of *why* a decision was made.
+Substantial changes to QuantClaw's architecture, user-facing surface, or core policies go through an RFC before implementation. The process exists to surface design trade-offs, give maintainers and contributors a chance to push back early, and leave a searchable record of *why* a decision was made.
 
 Governance, RFC ratification rules, and voting thresholds are defined in RFC #5577.
 
@@ -63,7 +63,7 @@ Large RFCs often ship across multiple PRs over several releases. The RFC's track
 
 ## Current open RFCs
 
-Open RFCs are the best primary source for "what's coming next" in ZeroClaw. Browse:
+Open RFCs are the best primary source for "what's coming next" in QuantClaw. Browse:
 
 ```bash
 gh issue list --repo zeroclaw-labs/zeroclaw --label type:rfc --state open

@@ -1,4 +1,4 @@
-//! ZeroClaw Desktop — Tauri application library.
+//! QuantClaw Desktop — Tauri application library.
 
 pub mod capabilities;
 pub mod commands;

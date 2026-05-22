@@ -122,7 +122,7 @@ services:
 
 ## Running multiple workspaces
 
-Each ZeroClaw instance owns one workspace. To run two:
+Each QuantClaw instance owns one workspace. To run two:
 
 1. Install the binary once
 2. Create `~/.zeroclaw-home/` and `~/.zeroclaw-work/` (or wherever)

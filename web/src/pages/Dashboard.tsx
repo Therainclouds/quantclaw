@@ -146,7 +146,7 @@ function ProcessRamCard({ process }: { process?: ProcessStats }) {
         {pct !== null
           ? `${pct.toFixed(pct < 1 ? 2 : 1)}% of ${formatBytes(process!.system_ram_total_bytes)}`
           : supported
-            ? 'resident (zeroclaw)'
+            ? 'resident (QuantClaw)'
             : 'not supported on this platform'}
       </p>
     </div>

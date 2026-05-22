@@ -1,6 +1,6 @@
 # Android Setup
 
-ZeroClaw provides prebuilt binaries for Android devices.
+QuantClaw provides prebuilt binaries for Android devices.
 
 ## Supported Architectures
 
@@ -11,7 +11,7 @@ ZeroClaw provides prebuilt binaries for Android devices.
 
 ## Installation via Termux
 
-The easiest way to run ZeroClaw on Android is via [Termux](https://termux.dev/).
+The easiest way to run QuantClaw on Android is via [Termux](https://termux.dev/).
 
 ### 1. Install Termux
 
@@ -19,7 +19,7 @@ Download from [F-Droid](https://f-droid.org/packages/com.termux/) (recommended) 
 
 > ⚠️ **Note:** The Play Store version is outdated and unsupported.
 
-### 2. Download ZeroClaw
+### 2. Download QuantClaw
 
 ```bash
 # Check your architecture
@@ -51,7 +51,7 @@ zeroclaw onboard
 
 ## Direct Installation via ADB
 
-For advanced users who want to run ZeroClaw outside Termux:
+For advanced users who want to run QuantClaw outside Termux:
 
 ```bash
 # From your computer with ADB

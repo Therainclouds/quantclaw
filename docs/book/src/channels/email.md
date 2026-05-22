@@ -65,7 +65,7 @@ allowed_senders = ["boss@example.com"]
 
 1. Create a Google Cloud project, enable Gmail API and Pub/Sub API
 2. Create a Pub/Sub topic the Gmail service can publish to
-3. Create a pull subscription on that topic for ZeroClaw
+3. Create a pull subscription on that topic for QuantClaw
 4. Create OAuth client credentials (desktop app type), download JSON
 5. On first run, `zeroclaw channel auth gmail-push` opens a browser for the OAuth consent
 6. The agent watches the subscription for new-mail notifications

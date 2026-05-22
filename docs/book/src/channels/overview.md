@@ -1,6 +1,6 @@
 # Channels — Overview
 
-A **channel** is a messaging surface the agent talks through. One ZeroClaw instance can bind multiple channels simultaneously — the same agent can answer in Discord, Telegram, email, and over the REST gateway without you running separate processes.
+A **channel** is a messaging surface the agent talks through. One QuantClaw instance can bind multiple channels simultaneously — the same agent can answer in Discord, Telegram, email, and over the REST gateway without you running separate processes.
 
 Channels are implementations of the `Channel` trait in `zeroclaw-api`. Each one is feature-gated at compile time, so a minimal build only includes the channels you want.
 

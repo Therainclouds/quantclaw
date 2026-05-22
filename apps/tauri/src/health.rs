@@ -1,4 +1,4 @@
-//! Background health polling for the ZeroClaw gateway.
+//! Background health polling for the QuantClaw gateway.
 
 use crate::gateway_client::GatewayClient;
 use crate::state::SharedState;

@@ -1,6 +1,6 @@
 # Philosophy
 
-ZeroClaw is built on four opinions, in priority order.
+QuantClaw is built on four opinions, in priority order.
 
 ## 1. You own it
 
@@ -25,7 +25,7 @@ For developers and home-lab users who understand the trade-offs, there's [YOLO m
 
 ## 3. Minimal — in binary size, dependencies, and surface area
 
-ZeroClaw is written in Rust and optimised for a small binary and fast startup. A microkernel roadmap ([RFC #5574](https://github.com/zeroclaw-labs/zeroclaw/issues/5574)) is actively splitting functionality behind feature flags so you only ship what you use. A release build of the core runtime fits in tens of megabytes; adding channel integrations or hardware support is opt-in.
+QuantClaw is written in Rust and optimised for a small binary and fast startup. A microkernel roadmap ([RFC #5574](https://github.com/zeroclaw-labs/zeroclaw/issues/5574)) is actively splitting functionality behind feature flags so you only ship what you use. A release build of the core runtime fits in tens of megabytes; adding channel integrations or hardware support is opt-in.
 
 The same discipline applies to the agent's prompt surface. Tool descriptions are [Fluent](https://projectfluent.org/)-localised and terse. There are no hidden system prompts injecting personality. The model sees what you configure.
 
@@ -39,7 +39,7 @@ This is deliberate. We have opinions about quality but not about vendors. If a b
 
 - **Not a SaaS.** There's no hosted version, no account system, no billing.
 - **Not a chat UI.** It's an agent runtime. You bring the front end — a CLI, a chat platform channel, the REST gateway, or the ACP JSON-RPC interface.
-- **Not a framework.** You don't build apps on top of ZeroClaw. You configure it and connect channels.
+- **Not a framework.** You don't build apps on top of QuantClaw. You configure it and connect channels.
 - **Not a toy.** Production deployments run 24/7 on homelab SBCs, VPSes, and cloud VMs. The `zeroclaw service` subcommand manages systemd / launchctl / Windows Service registration out of the box.
 
 ## How decisions get made

@@ -1,4 +1,4 @@
-# FND-001: Intentional Architecture — ZeroClaw Microkernel Transition
+# FND-001: Intentional Architecture — QuantClaw Microkernel Transition
 ### Starting v0.7.0 · Type: Architecture · Rev. 3
 
 > **Canonical reference** · Ratified by the team · Rev. 3
@@ -16,7 +16,7 @@
 ## Table of Contents
 
 1. [A Development Philosophy: Vision First](#1-a-development-philosophy-vision-first)
-2. [The Vision — What ZeroClaw Is](#2-the-vision--what-zeroclaw-is)
+2. [The Vision — What QuantClaw Is](#2-the-vision--what-zeroclaw-is)
 3. [Honest Assessment: Where We Are Today](#3-honest-assessment-where-we-are-today)
 4. [The Target Architecture](#4-the-target-architecture)
    - [4.4.1 Versioning Policy](#441-versioning-policy)
@@ -68,7 +68,7 @@ This is not a waterfall process. It is a **decision hierarchy**. It means that w
 
 ### The Problem With Skipping the Top
 
-ZeroClaw was bootstrapped by AI tools working from OpenClaw's TypeScript codebase. AI code generation works at the **Implementation** layer. It writes functions, structs, and modules that do things. It does not set Vision. It does not make Architecture decisions. It does not define Design contracts.
+QuantClaw was bootstrapped by AI tools working from OpenClaw's TypeScript codebase. AI code generation works at the **Implementation** layer. It writes functions, structs, and modules that do things. It does not set Vision. It does not make Architecture decisions. It does not define Design contracts.
 
 The result is a codebase that is impressively functional but architecturally accidental. The code does what it needs to do today, but it was not designed — it accumulated. This pattern has a name in our industry: **the Big Ball of Mud**. It is the most common architecture in software, not because anyone chose it, but because it is what you get when you skip the top of the hierarchy.
 
@@ -76,23 +76,23 @@ This RFC is our chance to fix that — not by throwing away what works, but by g
 
 ---
 
-## 2. The Vision — What ZeroClaw Is
+## 2. The Vision — What QuantClaw Is
 
 Before we talk about architecture, we need to be precise about what we are building. This is the Vision layer. Everything that follows must serve this.
 
-> **ZeroClaw is a personal AI assistant runtime that any person can run on any hardware — from a $10 embedded board to a cloud server — with zero configuration overhead, zero external service requirements, and zero compromise on capability or security.**
+> **QuantClaw is a personal AI assistant runtime that any person can run on any hardware — from a $10 embedded board to a cloud server — with zero configuration overhead, zero external service requirements, and zero compromise on capability or security.**
 
 Breaking that down into concrete commitments:
 
 **Zero overhead.** The core agent starts in milliseconds and uses less memory than a browser tab. This is not a marketing claim — it is an architectural constraint. Every decision we make must be tested against it.
 
-**Zero external requirements.** A user who downloads ZeroClaw and has an LLM provider configured should have a working, useful AI assistant without installing anything else. Channels, dashboards, and integrations are things you add when you want them — not things you need before it works.
+**Zero external requirements.** A user who downloads QuantClaw and has an LLM provider configured should have a working, useful AI assistant without installing anything else. Channels, dashboards, and integrations are things you add when you want them — not things you need before it works.
 
-**Zero compromise.** Lean does not mean weak. ZeroClaw must have a serious security model, real observability, and genuine extensibility. The tension between "small binary" and "full capability" is resolved through composition: a small core, extended by components you choose.
+**Zero compromise.** Lean does not mean weak. QuantClaw must have a serious security model, real observability, and genuine extensibility. The tension between "small binary" and "full capability" is resolved through composition: a small core, extended by components you choose.
 
-**For every skill level.** A student on a $10 Raspberry Pi and a team running a production deployment should both feel like ZeroClaw was designed for them. This means the default experience must be simple, and the advanced experience must be powerful — not two different products.
+**For every skill level.** A student on a $10 Raspberry Pi and a team running a production deployment should both feel like QuantClaw was designed for them. This means the default experience must be simple, and the advanced experience must be powerful — not two different products.
 
-**User-owned.** Your data, your hardware, your configuration. ZeroClaw does not require an account, does not phone home, and does not lock you into a platform.
+**User-owned.** Your data, your hardware, your configuration. QuantClaw does not require an account, does not phone home, and does not lock you into a platform.
 
 ---
 
@@ -102,7 +102,7 @@ This section is not criticism of anyone's work. It is a diagnosis, and you canno
 
 ### 3.1 The Structural Problem
 
-The entire ZeroClaw codebase currently lives in a single Rust crate. This means:
+The entire QuantClaw codebase currently lives in a single Rust crate. This means:
 
 - A Telegram channel and the core agent loop are compiled from the same source tree whether you use Telegram or not
 - The web dashboard (a full React application) is embedded in the binary using `rust-embed`, making every binary include the web UI even for users who only ever use the CLI
@@ -136,7 +136,7 @@ This diagnosis should not obscure what is genuinely well-designed:
 - **The observability system is mature.** OpenTelemetry, Prometheus, and DORA metrics are all implemented against a clean `Observer` trait. This is production-quality work.
 - **The security model is thoughtful.** Pairing codes, autonomy levels, sandboxing, and policy enforcement show real design intent.
 
-We are not rewriting ZeroClaw. We are giving its existing good ideas a structure they can grow in.
+We are not rewriting QuantClaw. We are giving its existing good ideas a structure they can grow in.
 
 ---
 
@@ -148,16 +148,16 @@ A microkernel architecture separates a minimal, stable core from optional subsys
 
 For an AI agent runtime, the mapping reveals **two distinct internal layers** that the OS analogy conflates:
 
-| OS Microkernel Concept | ZeroClaw Equivalent |
+| OS Microkernel Concept | QuantClaw Equivalent |
 |---|---|
 | Kernel | **Foundation layer** — API traits, config, providers, memory backends, infra, tool-call parser. The irreducible core: builds with `--no-default-features`. Can exchange messages with an LLM and store memory. Nothing more. |
-| Init / runtime system | **Agent runtime layer** — Orchestration loop, security policy enforcement, plugin host, core tools, IPC API. The `zeroclaw-runtime` crate, gated by the `agent-runtime` feature. This is what makes ZeroClaw an *agent*, not just a library. |
+| Init / runtime system | **Agent runtime layer** — Orchestration loop, security policy enforcement, plugin host, core tools, IPC API. The `zeroclaw-runtime` crate, gated by the `agent-runtime` feature. This is what makes QuantClaw an *agent*, not just a library. |
 | IPC | Local socket / IPC API between the runtime and external components |
 | Device drivers | Channel plugins (Telegram, Discord, etc.) |
 | Filesystem drivers | Memory backend plugins (SQLite, Markdown) |
 | User processes | Gateway binary, Tauri desktop app |
 
-The distinction matters: the **foundation** is the minimum that must exist for any ZeroClaw binary to function. The **runtime** is the minimum that must exist for it to function *as an agent*. Everything else is composed in.
+The distinction matters: the **foundation** is the minimum that must exist for any QuantClaw binary to function. The **runtime** is the minimum that must exist for it to function *as an agent*. Everything else is composed in.
 
 This two-layer split was identified during the Phase 1 workspace decomposition (PR #5559) and is reflected in the crate naming: `zeroclaw-runtime` (the crate) is gated by `agent-runtime` (the feature). The earlier revisions of this RFC used "kernel" loosely to refer to what is now correctly named the runtime layer. This revision corrects that terminology throughout.
 
@@ -248,7 +248,7 @@ The `zeroclaw plugin install` command (backed by `PluginHost`, which already exi
 
 #### 4.4.1 Versioning Policy
 
-As ZeroClaw transitions from a single crate to a multi-crate workspace, two concerns must be kept separate from the start:
+As QuantClaw transitions from a single crate to a multi-crate workspace, two concerns must be kept separate from the start:
 
 - **The product version** — what `zeroclaw --version` reports, what GitHub Releases, changelogs, and package managers (Homebrew, apt, cargo-binstall) track. This is the version operators and users reason about.
 - **Component stability** — how mature and reliable a given component is. A single version number cannot carry this signal on its own.
@@ -275,7 +275,7 @@ A single version in the root `Cargo.toml` is the authoritative product version. 
 
 - Users, operators, and packagers deal with one version, not twelve
 - Release automation via `release-plz` is straightforward: one PR, one bump, one changelog entry
-- It reflects ZeroClaw's identity as a **product**, not a library ecosystem
+- It reflects QuantClaw's identity as a **product**, not a library ecosystem
 - The WIT interface version — not the Rust crate version — is the actual plugin ABI contract (see §5.2)
 
 Three crate classes are intentionally excluded from workspace inheritance and maintain independent versions on their own cadence:
@@ -420,13 +420,13 @@ Target (correct):
 
 ## 5. Standards We Should Adopt
 
-Standards are agreements that have been made by many smart people over many years. Adopting them means we get those years of thinking for free, and it means our software integrates naturally with the rest of the ecosystem. Here are the ones that apply directly to ZeroClaw.
+Standards are agreements that have been made by many smart people over many years. Adopting them means we get those years of thinking for free, and it means our software integrates naturally with the rest of the ecosystem. Here are the ones that apply directly to QuantClaw.
 
 ### 5.1 Observability: OpenTelemetry
 
 **What it is:** OpenTelemetry (OTel) is the industry standard for collecting traces, metrics, and logs from software systems. It is maintained by the Cloud Native Computing Foundation and supported by every major cloud provider and monitoring tool.
 
-**Why it matters for ZeroClaw:** We have already implemented `OtelObserver` against our `Observer` trait. We have Prometheus metrics and DORA metrics. The issue is that these are not yet standardized across the codebase — some modules log with `tracing::info!`, others emit `ObserverEvent`s, and the two are not connected.
+**Why it matters for QuantClaw:** We have already implemented `OtelObserver` against our `Observer` trait. We have Prometheus metrics and DORA metrics. The issue is that these are not yet standardized across the codebase — some modules log with `tracing::info!`, others emit `ObserverEvent`s, and the two are not connected.
 
 **What we should do:**
 - Adopt OpenTelemetry as the single observability interface for all components
@@ -440,7 +440,7 @@ Standards are agreements that have been made by many smart people over many year
 
 **What it is:** WASI (WebAssembly System Interface) is the standard API that WebAssembly modules use to interact with the host system. WIT (WebAssembly Interface Types) is the interface definition language for describing what a WASM component exports and imports — think of it as a `.proto` file but for WASM plugins.
 
-**Why it matters for ZeroClaw:** Our `WasmTool` and `WasmChannel` bridges currently have no formal contract for what a plugin WASM binary must export. This means a plugin author has to guess. WIT files define that contract precisely and enable automatic code generation for plugin authors in any language.
+**Why it matters for QuantClaw:** Our `WasmTool` and `WasmChannel` bridges currently have no formal contract for what a plugin WASM binary must export. This means a plugin author has to guess. WIT files define that contract precisely and enable automatic code generation for plugin authors in any language.
 
 **What we should do:**
 - Define WIT interface files for `Tool`, `Channel`, and `Memory` plugin types (a `wit/` directory at the root of the workspace)
@@ -454,7 +454,7 @@ Standards are agreements that have been made by many smart people over many year
 
 **What it is:** OpenAPI is the standard for describing HTTP APIs. Version 3.1 aligns with JSON Schema Draft 2020-12.
 
-**Why it matters for ZeroClaw:** The kernel's local IPC API (the socket that the gateway and other components connect to) needs a stable, documented contract. Without a formal spec, the gateway and kernel will drift apart silently over time.
+**Why it matters for QuantClaw:** The kernel's local IPC API (the socket that the gateway and other components connect to) needs a stable, documented contract. Without a formal spec, the gateway and kernel will drift apart silently over time.
 
 **What we should do:**
 - Write an OpenAPI 3.1 spec for the kernel's local IPC API before implementing it
@@ -468,7 +468,7 @@ Standards are agreements that have been made by many smart people over many year
 
 **What it is:** The OWASP Application Security Verification Standard is a checklist of security requirements organized by risk level (L1 basic, L2 standard, L3 advanced).
 
-**Why it matters for ZeroClaw:** The gateway handles webhooks from external services, processes untrusted user input, and manages secrets. The pairing system, WebAuthn support, and rate limiting all exist — but there is no framework for verifying that they are complete or correct.
+**Why it matters for QuantClaw:** The gateway handles webhooks from external services, processes untrusted user input, and manages secrets. The pairing system, WebAuthn support, and rate limiting all exist — but there is no framework for verifying that they are complete or correct.
 
 **What we should do:**
 - Target ASVS Level 2 for the gateway and security module
@@ -481,7 +481,7 @@ Standards are agreements that have been made by many smart people over many year
 
 **What it is:** ISO/IEC 25010 defines a model for software product quality with eight top-level characteristics: functional suitability, performance efficiency, compatibility, usability, reliability, security, maintainability, and portability.
 
-**Why it matters for ZeroClaw:** When someone asks "is this good enough to merge?" the answer is currently subjective. ISO 25010 gives us a vocabulary for that conversation. The vision commitments map directly: "zero overhead" → performance efficiency; "any hardware" → portability; "zero compromise" → security + reliability.
+**Why it matters for QuantClaw:** When someone asks "is this good enough to merge?" the answer is currently subjective. ISO 25010 gives us a vocabulary for that conversation. The vision commitments map directly: "zero overhead" → performance efficiency; "any hardware" → portability; "zero compromise" → security + reliability.
 
 **What we should do:**
 - Use the eight quality characteristics as a lens in PR reviews for significant changes
@@ -701,9 +701,9 @@ Update `apps/tauri/` to bundle `zeroclaw-gw` as a Tauri sidecar binary. The Taur
 
 ### Phase 4 · v1.0.0 — "The Platform"
 
-**Theme:** ZeroClaw becomes a composable platform, not a monolithic application.
+**Theme:** QuantClaw becomes a composable platform, not a monolithic application.
 
-**Why this phase:** With the kernel stable, the gateway separate, and the plugin system working, v1.0.0 is the release where the architecture becomes the product. External developers can write and publish plugins. Users can assemble exactly the ZeroClaw they want. The binary can credibly claim the lean profile the vision promises.
+**Why this phase:** With the kernel stable, the gateway separate, and the plugin system working, v1.0.0 is the release where the architecture becomes the product. External developers can write and publish plugins. Users can assemble exactly the QuantClaw they want. The binary can credibly claim the lean profile the vision promises.
 
 #### Deliverables
 
@@ -821,7 +821,7 @@ The plugin model means channels and tools can have independent release cycles. A
 
 ### For the community
 
-A published WIT interface and plugin SDK means anyone can extend ZeroClaw without forking it. A company that needs a specific integration can write a plugin against the public interface. This is how ecosystems are built.
+A published WIT interface and plugin SDK means anyone can extend QuantClaw without forking it. A company that needs a specific integration can write a plugin against the public interface. This is how ecosystems are built.
 
 ---
 
@@ -864,6 +864,6 @@ These are resources the team may find valuable. They are not required reading, b
 
 ---
 
-*This proposal was developed from a detailed analysis of the ZeroClaw codebase at v0.6.8. The code metrics cited are based on direct measurement of the source files. The architectural recommendations reflect established patterns in systems software design applied to the specific constraints and goals of the ZeroClaw project.*
+*This proposal was developed from a detailed analysis of the QuantClaw codebase at v0.6.8. The code metrics cited are based on direct measurement of the source files. The architectural recommendations reflect established patterns in systems software design applied to the specific constraints and goals of the QuantClaw project.*
 
 *Feedback, corrections, and counterproposals are welcome. The best architecture is the one the team understands and believes in — not the one any single person dictated.*

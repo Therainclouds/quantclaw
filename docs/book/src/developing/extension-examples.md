@@ -1,6 +1,6 @@
 # Extension Examples
 
-ZeroClaw's architecture is trait-driven and modular.
+QuantClaw's architecture is trait-driven and modular.
 To add a new provider, channel, tool, or memory backend, implement the corresponding trait and register it in the factory module.
 
 This page contains minimal, working examples for each core extension point.
@@ -78,7 +78,7 @@ impl Tool for HttpGetTool {
 
 ## Channel (`crates/zeroclaw-api/src/channel.rs`)
 
-Channels let ZeroClaw communicate through any messaging platform.
+Channels let QuantClaw communicate through any messaging platform.
 
 **Required methods**: `name()`, `send(&SendMessage)`, `listen()`.
 Default implementations exist for `health_check()`, `start_typing()`, `stop_typing()`,
@@ -198,7 +198,7 @@ impl Channel for TelegramChannel {
 
 ## Model provider (`crates/zeroclaw-api/src/model_provider.rs`)
 
-Model providers are LLM backend adapters. Each implementation connects ZeroClaw to a different model API.
+Model providers are LLM backend adapters. Each implementation connects QuantClaw to a different model API.
 
 **Required method**: `chat_with_system(system_prompt: Option<&str>, message: &str, model: &str, temperature: Option<f64>) -> Result<String>`.
 Everything else has default implementations:

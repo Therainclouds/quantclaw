@@ -9,7 +9,7 @@ relates-to:
 
 # Plugin Protocol
 
-This document defines the protocol between ZeroClaw's plugin host and WASM
+This document defines the protocol between QuantClaw's plugin host and WASM
 plugin modules.
 
 ## Plugin structure
@@ -145,7 +145,7 @@ On failure:
 
 ## Host functions
 
-Host functions are provided by the ZeroClaw runtime and callable from within
+Host functions are provided by the QuantClaw runtime and callable from within
 the WASM plugin. Each is gated on a manifest permission — calling without the
 required permission returns an error.
 

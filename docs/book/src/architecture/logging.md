@@ -1,6 +1,6 @@
 # Logging architecture
 
-ZeroClaw has exactly one logging surface: the `zeroclaw_log::record!` macro. Every emission in the workspace — agent loop activity, channel I/O, cron runs, tool calls, memory ops, session lifecycle, errors — flows through it. The macro feeds a single `LogCaptureLayer` that materializes structured `LogEvent` records and routes them to three sinks at once:
+QuantClaw has exactly one logging surface: the `zeroclaw_log::record!` macro. Every emission in the workspace — agent loop activity, channel I/O, cron runs, tool calls, memory ops, session lifecycle, errors — flows through it. The macro feeds a single `LogCaptureLayer` that materializes structured `LogEvent` records and routes them to three sinks at once:
 
 1. The terminal (via the `tracing-subscriber` fmt layer that `zeroclaw-log` installs internally) so operators see colored, alias-prefixed lines on stderr.
 2. The persisted JSONL log at `<workspace>/state/runtime-trace.jsonl` (when `[observability] log_persistence` is `"rolling"` or `"full"`).

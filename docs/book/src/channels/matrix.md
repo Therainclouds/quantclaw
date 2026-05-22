@@ -1,6 +1,6 @@
 # Matrix
 
-Run ZeroClaw in Matrix rooms, including end-to-end encrypted (E2EE) rooms.
+Run QuantClaw in Matrix rooms, including end-to-end encrypted (E2EE) rooms.
 
 Common failure mode this guide targets:
 
@@ -24,7 +24,7 @@ Before testing message flow:
 2. The access token belongs to the same bot account.
 3. `room_id` is correct:
    - preferred: canonical room ID (`!room:server`)
-   - supported: room alias (`#alias:server`) — ZeroClaw resolves it
+   - supported: room alias (`#alias:server`) — QuantClaw resolves it
 4. `allowed_users` allows the sender (`["*"]` for open testing).
 5. For E2EE rooms, the bot device has received encryption keys for the room.
 
@@ -57,18 +57,18 @@ Required: `homeserver`, `access-token`, `room-id`. Strongly recommended for E2EE
 
 ### About `user-id` and `device-id`
 
-- ZeroClaw attempts to read identity from Matrix `/_matrix/client/v3/account/whoami`.
+- QuantClaw attempts to read identity from Matrix `/_matrix/client/v3/account/whoami`.
 - If `whoami` doesn't return `device_id`, set `device-id` manually — critical for E2EE session restore.
 
 ## 3. Obtaining `access-token` and `device-id`
 
-Brand-new bot accounts need a Matrix access token before ZeroClaw can connect. Element doesn't expose the token directly, so the canonical path is a one-shot password-login API call that returns both the access token and a stable device ID together.
+Brand-new bot accounts need a Matrix access token before QuantClaw can connect. Element doesn't expose the token directly, so the canonical path is a one-shot password-login API call that returns both the access token and a stable device ID together.
 
 If your operator account already has a token (e.g. you copied it from another deployment), skip to §4. If you only need to look up the `device_id` for an existing token, see §5H Option 1 (`whoami`) or Option 2 (Element).
 
 ### Step 1 — Mint a token via password login
 
-Run this once. Replace `your.homeserver`, the bot username, password, and pick any short `device_id` string (alphanumeric, no spaces — this is the *server-side* device label that ZeroClaw will reuse on every restart):
+Run this once. Replace `your.homeserver`, the bot username, password, and pick any short `device_id` string (alphanumeric, no spaces — this is the *server-side* device label that QuantClaw will reuse on every restart):
 
 ```bash
 curl -sS -X POST "https://your.homeserver/_matrix/client/v3/login" \
@@ -82,7 +82,7 @@ Response:
 {"user_id": "@bot:example.com", "access_token": "syt_...", "device_id": "NEWDEVICE"}
 ```
 
-### Step 2 — Apply both values to ZeroClaw
+### Step 2 — Apply both values to QuantClaw
 
 ```bash
 zeroclaw config set channels.matrix.access-token    # paste the access_token (input is masked)
@@ -113,7 +113,7 @@ zeroclaw service restart        # or `zeroclaw daemon` to run foreground
 
 Send a plain-text message in the configured Matrix room. Confirm:
 
-- ZeroClaw logs show the Matrix listener starting with no repeated sync/auth errors.
+- QuantClaw logs show the Matrix listener starting with no repeated sync/auth errors.
 - In an encrypted room, the bot can read and reply to encrypted messages from allowed users.
 
 ## 5. Troubleshooting "no response"
@@ -137,7 +137,7 @@ Work through in order.
 
 ### C. Token and identity
 
-> **About `$MATRIX_TOKEN` in the snippets below.** Secrets in ZeroClaw are encrypted at rest and intentionally **not** retrievable via `zeroclaw config get` — it prints `[masked]` for any secret field. You have two options:
+> **About `$MATRIX_TOKEN` in the snippets below.** Secrets in QuantClaw are encrypted at rest and intentionally **not** retrievable via `zeroclaw config get` — it prints `[masked]` for any secret field. You have two options:
 >
 > 1. **Get a fresh token** by re-running the password-login curl from §3 Step 1. Export the `access_token` it returns. Good for validation and recovery paths — doesn't affect what's in your config.
 > 2. **Keep a copy** of the token when you first paste it into `zeroclaw onboard` or `zeroclaw config set channels.matrix.access-token`. A one-time side-effect — write it to a scratch note if you want to run these curl checks later.
@@ -174,7 +174,7 @@ curl -sS -H "Authorization: Bearer $MATRIX_TOKEN" \
 
 ### E. Log levels
 
-ZeroClaw suppresses `matrix_sdk`, `matrix_sdk_base`, and `matrix_sdk_crypto` to `warn` by default — they're noisy at `info`. Restore SDK output for debugging:
+QuantClaw suppresses `matrix_sdk`, `matrix_sdk_base`, and `matrix_sdk_crypto` to `warn` by default — they're noisy at `info`. Restore SDK output for debugging:
 
 ```bash
 RUST_LOG=info,matrix_sdk=info,matrix_sdk_base=info,matrix_sdk_crypto=info zeroclaw daemon
@@ -182,9 +182,9 @@ RUST_LOG=info,matrix_sdk=info,matrix_sdk_base=info,matrix_sdk_crypto=info zerocl
 
 ### F. Message formatting (Markdown)
 
-- ZeroClaw sends Matrix replies as markdown-capable `m.room.message` text content.
+- QuantClaw sends Matrix replies as markdown-capable `m.room.message` text content.
 - Matrix clients that support `formatted_body` render emphasis, lists, and code blocks.
-- If formatting appears as plain text: check client capability first, then confirm ZeroClaw is running a build with markdown-enabled Matrix output.
+- If formatting appears as plain text: check client capability first, then confirm QuantClaw is running a build with markdown-enabled Matrix output.
 
 ### G. Fresh start test
 
@@ -194,7 +194,7 @@ After config changes, restart the daemon and send a new message. Old timeline hi
 
 Use this when you already have an access token (e.g. inherited from another deployment) and need to look up its `device_id`. For brand-new bots, see §3 — the password-login flow there returns both values together.
 
-ZeroClaw needs a stable `device_id` for E2EE session restore. Without it, a new device is registered every restart, breaking key sharing and device verification.
+QuantClaw needs a stable `device_id` for E2EE session restore. Without it, a new device is registered every restart, breaking key sharing and device verification.
 
 #### Option 1 — `whoami` (easiest)
 
@@ -235,7 +235,7 @@ Keep `device-id` stable — changing it forces a new device registration, which 
 
 A fresh login creates a new device with a new `device_id`, sidestepping the OTK conflict entirely (no UIA-gated device deletion required).
 
-1. Stop ZeroClaw.
+1. Stop QuantClaw.
 
    ```bash
    zeroclaw service stop
@@ -281,7 +281,7 @@ A fresh login creates a new device with a new `device_id`, sidestepping the OTK 
 
 ### I. Recovery key (recommended for E2EE)
 
-A recovery key lets ZeroClaw automatically restore room keys and cross-signing secrets from server-side backup. Device resets, crypto-store deletions, and fresh installs all recover automatically — no emoji verification, no manual key sharing.
+A recovery key lets QuantClaw automatically restore room keys and cross-signing secrets from server-side backup. Device resets, crypto-store deletions, and fresh installs all recover automatically — no emoji verification, no manual key sharing.
 
 #### Step 1 — Get your recovery key from Element
 
@@ -291,7 +291,7 @@ A recovery key lets ZeroClaw automatically restore room keys and cross-signing s
 4. If backup isn't set up, click "Set up Secure Backup" → "Generate a Security Key". Save the key — it looks like `EsTj 3yST y93F SLpB ...`.
 5. Log out of Element.
 
-#### Step 2 — Add the recovery key to ZeroClaw
+#### Step 2 — Add the recovery key to QuantClaw
 
 Either path works. `zeroclaw onboard channels` is easier for fresh installs; `zeroclaw config set` is preferred for existing installs.
 
@@ -330,7 +330,7 @@ On startup you should see:
 Matrix E2EE recovery successful — room keys and cross-signing secrets restored from server backup.
 ```
 
-From now on, even if the local crypto store is deleted, ZeroClaw recovers automatically on next startup.
+From now on, even if the local crypto store is deleted, QuantClaw recovers automatically on next startup.
 
 ## 6. Debug logging
 
@@ -360,23 +360,23 @@ RUST_LOG=zeroclaw::channels::matrix=debug,matrix_sdk_crypto=debug zeroclaw daemo
 - Start with permissive `allowed_users`, tighten to explicit user IDs once verified.
 - Prefer canonical room IDs in production to avoid alias drift.
 - **Threading:** when `channels.matrix.reply-in-thread` is `true` (default), every bot reply lives in a thread rooted at the user's message. Top-level user messages open a fresh thread; existing threads are continued. The main room timeline only carries the user-initiated messages.
-- **Thread root context:** the first inbound message ZeroClaw sees in any given thread is prefixed with `[Thread root from @sender]: <root body>` so the agent has the conversation that triggered the reply. Threads the bot itself started skip the preamble. Tracking is in-memory only — after a daemon restart, the next message in each active thread re-injects the preamble exactly once.
-- **Inline-reply media:** `channels.matrix.mention-only = true` makes the bot ignore naked media uploads (no text body to mention against). When the user inline-replies to such a dropped event with a question (`@bot can you see this?`), ZeroClaw walks the reply's `m.relates_to.m.in_reply_to.event_id`, fetches the parent event, and pulls its media into the current message — the agent's vision pipeline sees the image even though the original upload was filtered out.
+- **Thread root context:** the first inbound message QuantClaw sees in any given thread is prefixed with `[Thread root from @sender]: <root body>` so the agent has the conversation that triggered the reply. Threads the bot itself started skip the preamble. Tracking is in-memory only — after a daemon restart, the next message in each active thread re-injects the preamble exactly once.
+- **Inline-reply media:** `channels.matrix.mention-only = true` makes the bot ignore naked media uploads (no text body to mention against). When the user inline-replies to such a dropped event with a question (`@bot can you see this?`), QuantClaw walks the reply's `m.relates_to.m.in_reply_to.event_id`, fetches the parent event, and pulls its media into the current message — the agent's vision pipeline sees the image even though the original upload was filtered out.
 - **Attachments thread alongside text:** `room.send_attachment` calls carry an `AttachmentConfig::reply(...)` with `EnforceThread::Threaded` when a thread anchor is present, so PDFs / images / voice notes land inside the bot's thread instead of the main timeline.
-- **Outbound media markers:** the agent emits `[image:url|path]`, `[file:url|path]`, `[voice:url|path]`, `[video:...]`, `[audio:...]` (and uppercase / `[document:...]` aliases) inside its reply text; ZeroClaw fetches the bytes (HTTP for `http(s)://`, local read otherwise) and uploads as the appropriate Matrix message event. **Missing or unreadable targets are non-fatal:** the channel logs a warning, drops just that marker, and appends a `(note: I couldn't deliver the file at <path>.)` line so the operator sees what was attempted instead of a silently-dropped reply.
-- **Voice messages** (MSC3245): inbound `m.audio` events carrying the `org.matrix.msc3245.voice` field are saved to `{workspace_dir}/matrix_files/` and run through `[transcription]` so the agent gets both the transcript text and the source path. Outbound voice notes use the `[voice:<url|path>]` marker; ZeroClaw uploads as `m.audio` with the voice flag + zero-waveform set so Element renders the bubble as a voice note. Default transcription provider is Groq's hosted Whisper API — set `transcription.default-provider = "local_whisper"` and `transcription.local-whisper.url` for fully on-device transcription.
+- **Outbound media markers:** the agent emits `[image:url|path]`, `[file:url|path]`, `[voice:url|path]`, `[video:...]`, `[audio:...]` (and uppercase / `[document:...]` aliases) inside its reply text; QuantClaw fetches the bytes (HTTP for `http(s)://`, local read otherwise) and uploads as the appropriate Matrix message event. **Missing or unreadable targets are non-fatal:** the channel logs a warning, drops just that marker, and appends a `(note: I couldn't deliver the file at <path>.)` line so the operator sees what was attempted instead of a silently-dropped reply.
+- **Voice messages** (MSC3245): inbound `m.audio` events carrying the `org.matrix.msc3245.voice` field are saved to `{workspace_dir}/matrix_files/` and run through `[transcription]` so the agent gets both the transcript text and the source path. Outbound voice notes use the `[voice:<url|path>]` marker; QuantClaw uploads as `m.audio` with the voice flag + zero-waveform set so Element renders the bubble as a voice note. Default transcription provider is Groq's hosted Whisper API — set `transcription.default-provider = "local_whisper"` and `transcription.local-whisper.url` for fully on-device transcription.
 - **Acknowledgement reactions:** controlled by `channels.matrix.ack-reactions` (default `true`). When on, the bot reacts with 👀 while processing and ✅ when done. Set to `false` to keep rooms reaction-free.
 - **Streaming modes** (`channels.matrix.stream-mode`):
     - `off` (default) — reply posts as a single message once the agent finishes.
     - `partial` — initial draft posted immediately, edited in place every `draft-update-interval-ms` as the agent generates output. Tool-execution status is shown by the same edit pipeline.
     - `multi_message` — no initial draft. Each `\n\n`-bounded paragraph posts as its own threaded message, separated by `multi-message-delay-ms`. Code-fence-aware: blank lines inside ```fenced``` blocks aren't treated as paragraph breaks.
-- **Persistent sessions:** on first successful login, ZeroClaw writes `~/.zeroclaw/state/matrix/session.json` (user_id + device_id + access_token + optional refresh_token). Subsequent restarts call `restore_session()` from that blob — no re-login. The matrix-rust-sdk SQLite crypto store lives alongside it at `~/.zeroclaw/state/matrix/store/`. **Once `session.json` exists, rotating `access-token` in config has no effect until the file is deleted** — the saved token wins. Delete `session.json` to force a re-login from config values.
-- **Cross-signing:** when `recovery-key` matches what is sealed in your account's server-side secret storage, ZeroClaw runs `recovery().recover(key)` on every startup, the SDK imports your existing master / self-signing / user-signing keys, and the freshly registered device is automatically signed. **No bootstrap, no UIA, no key rotation.** If your account doesn't yet have cross-signing set up, generate the recovery key in Element (Settings → Security & Privacy → Secure Backup) before configuring `recovery-key`.
-- **Cron delivery:** `delivery.to` should be a plain room id (`!abc:server`) or alias (`#room:server`). Older configs that wrote `<sender>||<room>` are tolerated — ZeroClaw extracts the last `!`/`#`-prefixed segment and warns about the malformed value.
+- **Persistent sessions:** on first successful login, QuantClaw writes `~/.zeroclaw/state/matrix/session.json` (user_id + device_id + access_token + optional refresh_token). Subsequent restarts call `restore_session()` from that blob — no re-login. The matrix-rust-sdk SQLite crypto store lives alongside it at `~/.zeroclaw/state/matrix/store/`. **Once `session.json` exists, rotating `access-token` in config has no effect until the file is deleted** — the saved token wins. Delete `session.json` to force a re-login from config values.
+- **Cross-signing:** when `recovery-key` matches what is sealed in your account's server-side secret storage, QuantClaw runs `recovery().recover(key)` on every startup, the SDK imports your existing master / self-signing / user-signing keys, and the freshly registered device is automatically signed. **No bootstrap, no UIA, no key rotation.** If your account doesn't yet have cross-signing set up, generate the recovery key in Element (Settings → Security & Privacy → Secure Backup) before configuring `recovery-key`.
+- **Cron delivery:** `delivery.to` should be a plain room id (`!abc:server`) or alias (`#room:server`). Older configs that wrote `<sender>||<room>` are tolerated — QuantClaw extracts the last `!`/`#`-prefixed segment and warns about the malformed value.
 
 ## 8. Auto-recovery from corrupted local state
 
-The matrix-rust-sdk default SQLite store is single-device and assumes the local view stays in sync with the homeserver. Two failure modes break that assumption irrecoverably; ZeroClaw detects each at startup and (when `password` + `user-id` are both configured) auto-wipes `~/.zeroclaw/state/matrix/` and re-authenticates so a fresh device is created server-side.
+The matrix-rust-sdk default SQLite store is single-device and assumes the local view stays in sync with the homeserver. Two failure modes break that assumption irrecoverably; QuantClaw detects each at startup and (when `password` + `user-id` are both configured) auto-wipes `~/.zeroclaw/state/matrix/` and re-authenticates so a fresh device is created server-side.
 
 - **Orphan crypto state.** A `store/` directory exists but `session.json` doesn't (manual cleanup, interrupted prior install, etc.). Logging in fresh on top of orphaned crypto state reproduces `Duplicate one-time keys` / `SigningKeyChanged` conflicts that don't self-heal.
 - **`StateStoreDataKey::OneTimeKeyAlreadyUploaded` flag set.** The SDK persists this key into the state store the first time it sees a duplicate-OTK upload (per the SDK's own comment: "we forgot about some of our one-time keys. This will lead to UTDs."). It survives restarts; the only fix is wipe and re-register.

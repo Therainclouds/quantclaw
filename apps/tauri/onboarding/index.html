@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Welcome to ZeroClaw</title>
+    <title>Welcome to QuantClaw</title>
     <style>
       :root {
         color-scheme: light dark;
@@ -234,7 +234,7 @@
             {
               id: "welcome",
               icon: "🐧",
-              title: "Welcome to ZeroClaw",
+              title: "Welcome to QuantClaw",
               subtitle:
                 "You're almost ready. Linux has fewer privacy gates than macOS. " +
                 "We'll quickly confirm desktop notifications. Screen capture remains macOS-only for now.",
@@ -249,7 +249,7 @@
               icon: "✅",
               title: "You're ready",
               subtitle:
-                "ZeroClaw now runs in your system tray. Open it anytime from the tray icon to start chatting.",
+                "QuantClaw now runs in your system tray. Open it anytime from the tray icon to start chatting.",
               perms: [],
               isFinal: true,
             },
@@ -261,9 +261,9 @@
             {
               id: "welcome",
               icon: "🪟",
-              title: "Welcome to ZeroClaw",
+              title: "Welcome to QuantClaw",
               subtitle:
-                "We'll walk through the Windows permissions ZeroClaw uses most: microphone, camera, and optional input monitoring.",
+                "We'll walk through the Windows permissions QuantClaw uses most: microphone, camera, and optional input monitoring.",
               perms: [],
               ctaLabel: "Get Started",
             },
@@ -272,7 +272,7 @@
               icon: "🎙️",
               title: "Microphone & Camera",
               subtitle:
-                "Grant access in Windows Privacy settings so ZeroClaw can support voice and visual workflows.",
+                "Grant access in Windows Privacy settings so QuantClaw can support voice and visual workflows.",
               perms: [
                 { name: "microphone", label: "Microphone" },
                 { name: "camera", label: "Camera" },
@@ -284,7 +284,7 @@
               title: "Input Monitoring (optional)",
               subtitle:
                 "Global input hooks require administrator elevation on Windows. " +
-                "If you skip this, ZeroClaw still works normally for standard desktop control.",
+                "If you skip this, QuantClaw still works normally for standard desktop control.",
               perms: [
                 { name: "input_monitoring", label: "Input Monitoring (Admin)" },
               ],
@@ -296,7 +296,7 @@
               title: "Notifications",
               subtitle:
                 "Windows notifications are available through Action Center. " +
-                "We'll keep this enabled so ZeroClaw can alert you when tasks complete.",
+                "We'll keep this enabled so QuantClaw can alert you when tasks complete.",
               perms: [
                 { name: "notifications", label: "Notifications" },
               ],
@@ -307,7 +307,7 @@
               icon: "✅",
               title: "You're ready",
               subtitle:
-                "ZeroClaw now lives in your system tray. Open it anytime from the tray icon to start chatting.",
+                "QuantClaw now lives in your system tray. Open it anytime from the tray icon to start chatting.",
               perms: [],
               isFinal: true,
             },
@@ -318,9 +318,9 @@
           {
             id: "welcome",
             icon: "👋",
-            title: "Welcome to ZeroClaw",
+            title: "Welcome to QuantClaw",
             subtitle:
-              "ZeroClaw is a menu-bar agent that can act on your Mac on your behalf. " +
+              "QuantClaw is a menu-bar agent that can act on your Mac on your behalf. " +
               "On the next few screens you'll grant the macOS permissions it needs. " +
               "You can change any of these later in System Settings.",
             perms: [],
@@ -331,9 +331,9 @@
             icon: "🖱️",
             title: "Accessibility",
             subtitle:
-              "Lets ZeroClaw click, type, and read other apps' UI on your behalf. " +
+              "Lets QuantClaw click, type, and read other apps' UI on your behalf. " +
               "This is the most important permission for an agent that controls your Mac. " +
-              "Click Grant to open System Settings → Privacy & Security → Accessibility, then toggle ZeroClaw on.",
+              "Click Grant to open System Settings → Privacy & Security → Accessibility, then toggle QuantClaw on.",
             perms: [
               { name: "accessibility", label: "Accessibility" },
             ],
@@ -355,7 +355,7 @@
             icon: "🤖",
             title: "Drive other apps",
             subtitle:
-              "Automation lets ZeroClaw control Finder, Mail, Safari, Calendar, Reminders, Notes, Music, and other " +
+              "Automation lets QuantClaw control Finder, Mail, Safari, Calendar, Reminders, Notes, Music, and other " +
               "scriptable apps via AppleScript. macOS asks for confirmation per-app the first time you use it.",
             perms: [
               { name: "automation", label: "Automation (AppleScript)" },
@@ -380,7 +380,7 @@
             icon: "🔔",
             title: "Notifications",
             subtitle:
-              "Let ZeroClaw notify you when long-running tasks finish or attention is needed. " +
+              "Let QuantClaw notify you when long-running tasks finish or attention is needed. " +
               "macOS will show banner alerts; you can configure delivery in System Settings.",
             perms: [
               { name: "notifications", label: "Notifications" },
@@ -405,7 +405,7 @@
             icon: "✅",
             title: "You're ready",
             subtitle:
-              "ZeroClaw lives in your menu bar. Click the icon up top anytime to start a chat. " +
+              "QuantClaw lives in your menu bar. Click the icon up top anytime to start a chat. " +
               "Below is what you granted just now — you can revisit any of these in System Settings.",
             perms: [],
             isFinal: true,
@@ -532,7 +532,7 @@
           nextBtn.classList.add("large");
         } else if (step.isFinal) {
           skipBtn.style.display = "none";
-          nextBtn.textContent = "Start ZeroClaw";
+          nextBtn.textContent = "Start QuantClaw";
           nextBtn.classList.add("large");
         } else {
           skipBtn.style.display = step.optional ? "inline-flex" : "none";

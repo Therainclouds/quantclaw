@@ -12,7 +12,7 @@ This document describes how external events trigger SOP runs.
 
 ## 1. Overview
 
-ZeroClaw routes MQTT/webhook/cron/peripheral events through a unified SOP dispatcher (`dispatch_sop_event`).
+QuantClaw routes MQTT/webhook/cron/peripheral events through a unified SOP dispatcher (`dispatch_sop_event`).
 
 Key behaviors:
 

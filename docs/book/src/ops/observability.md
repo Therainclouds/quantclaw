@@ -1,6 +1,6 @@
 # Logs & observability
 
-Every event ZeroClaw emits flows through one crate: `zeroclaw-log`. The crate
+Every event QuantClaw emits flows through one crate: `zeroclaw-log`. The crate
 owns the on-disk JSONL schema, the in-process broadcast stream the dashboard
 reads, the bridge to the typed `Observer` (Prometheus / OTel), and the
 macros (`record!`, `scope!`, `spawn!`) that subsystems call.

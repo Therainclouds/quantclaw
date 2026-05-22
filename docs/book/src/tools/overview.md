@@ -34,9 +34,9 @@ Optional, feature-gated:
 
 ## Extension protocols
 
-Beyond built-in tools, ZeroClaw supports the **[MCP](./mcp.md)** (Model Context Protocol) extension surface. Connect any MCP server (Claude Code's filesystem, Playwright, your own) and the agent picks up its tools at startup.
+Beyond built-in tools, QuantClaw supports the **[MCP](./mcp.md)** (Model Context Protocol) extension surface. Connect any MCP server (Claude Code's filesystem, Playwright, your own) and the agent picks up its tools at startup.
 
-For IDE-side integration where an editor drives ZeroClaw as a subprocess, see [ACP](../channels/acp.md) — Agent Client Protocol lives under channels since it's an inbound session-management surface, not a tool the agent invokes.
+For IDE-side integration where an editor drives QuantClaw as a subprocess, see [ACP](../channels/acp.md) — Agent Client Protocol lives under channels since it's an inbound session-management surface, not a tool the agent invokes.
 
 ## Authoring a tool
 

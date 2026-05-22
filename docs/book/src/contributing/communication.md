@@ -78,7 +78,7 @@ Release notes are cross-posted to Discord `#releases` and the community Twitter.
 
 ## Commercial support
 
-None offered. ZeroClaw is maintained by the community. If you're deploying at scale and want SLAs, sponsor a maintainer directly or fund a dedicated support arrangement through the core team. Reach out via `hello@zeroclaw.dev`.
+None offered. QuantClaw is maintained by the community. If you're deploying at scale and want SLAs, sponsor a maintainer directly or fund a dedicated support arrangement through the core team. Reach out via `hello@zeroclaw.dev`.
 
 ## Feedback
 

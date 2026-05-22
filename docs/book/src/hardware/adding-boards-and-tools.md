@@ -1,6 +1,6 @@
-# Adding Boards and Tools — ZeroClaw Hardware Guide
+# Adding Boards and Tools — QuantClaw Hardware Guide
 
-This guide explains how to add new hardware boards and custom tools to ZeroClaw.
+This guide explains how to add new hardware boards and custom tools to QuantClaw.
 
 ## Quick Start: Add a Board via CLI
 
@@ -58,7 +58,7 @@ builtin_led: 13
 
 ### PDF Datasheets
 
-With the `rag-pdf` feature, ZeroClaw can index PDF files:
+With the `rag-pdf` feature, QuantClaw can index PDF files:
 
 ```bash
 cargo build --features hardware,rag-pdf

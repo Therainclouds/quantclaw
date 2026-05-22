@@ -1,7 +1,7 @@
 [book]
-title = "ZeroClaw Docs"
-description = "Documentation for the ZeroClaw personal AI assistant."
-authors = ["ZeroClaw Labs"]
+title = "QuantClaw Docs"
+description = "Documentation for the QuantClaw personal AI assistant."
+authors = ["QuantClaw Labs"]
 language = "en"
 src = "src"
 

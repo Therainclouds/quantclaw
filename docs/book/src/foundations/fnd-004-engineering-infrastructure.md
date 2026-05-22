@@ -228,7 +228,7 @@ This approach transforms security scanning from a binary pass/fail into a docume
 
 When a new advisory appears in the dependency tree — whether from a PR or from the daily advisory database update — the process is:
 
-1. **Classify the advisory**: Is the affected crate a direct dependency or transitive? Does ZeroClaw call the vulnerable code path? Is there a fixed version available?
+1. **Classify the advisory**: Is the affected crate a direct dependency or transitive? Does QuantClaw call the vulnerable code path? Is there a fixed version available?
 2. **Determine the response**:
    - *Vulnerability in a direct dep with a fix available* → update the dep, no ignore needed
    - *Vulnerability in a transitive dep with a fix available* → pin the transitive version or wait for the direct dep to update; open a tracking issue
@@ -330,7 +330,7 @@ The update process: use `dependabot` or `renovate` configured for GitHub Actions
 
 SLSA (Supply-chain Levels for Software Artifacts, pronounced "salsa") is a framework developed by Google and adopted across the industry for securing the software supply chain. It defines four levels of build integrity, from basic to hermetic.
 
-For ZeroClaw's current scale and team size, **SLSA Level 2** is the appropriate target:
+For QuantClaw's current scale and team size, **SLSA Level 2** is the appropriate target:
 
 - Builds run on a hosted CI platform (already true — GitHub Actions)
 - Build scripts are version-controlled (already true)
@@ -344,7 +344,7 @@ GitHub Actions supports SLSA Level 2 provenance generation natively through the 
 
 The architecture RFC's versioning policy and release-plz integration both depend on conventional commit format for changelog generation. The governance RFC already references PR title conventions. This RFC formalises the connection: conventional commit format in commit messages and PR titles is a requirement, not a suggestion, because it is the input that drives automated changelog generation.
 
-The categories that matter for ZeroClaw's changelog:
+The categories that matter for QuantClaw's changelog:
 
 | Prefix | Changelog section | Version impact |
 |---|---|---|

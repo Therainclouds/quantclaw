@@ -1,5 +1,5 @@
 // Picker view used by /onboard and /config to mirror the TUI's
-//   ZeroClaw Onboard › Providers › [filter:_____] › <pickable list>
+//   QuantClaw Onboard › Providers › [filter:_____] › <pickable list>
 // flow. Items come from /api/onboard/sections/<section> (gateway derives
 // them from list_providers / selectable_memory_backends / schema-walk).
 //

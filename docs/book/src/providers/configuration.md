@@ -75,7 +75,7 @@ Several providers accept OAuth or subscription-style tokens instead of raw API k
 
 ## Container-friendly overrides
 
-When ZeroClaw runs inside a container and a provider is on the host (e.g. Ollama), set `uri` to a host-reachable address:
+When QuantClaw runs inside a container and a provider is on the host (e.g. Ollama), set `uri` to a host-reachable address:
 
 ```toml
 [providers.models.ollama.local]

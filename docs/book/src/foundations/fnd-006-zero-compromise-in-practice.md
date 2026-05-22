@@ -10,7 +10,7 @@
 
 > A note to the team before you read this.
 >
-> This is the sixth document in ZeroClaw's maturity framework. The five before it
+> This is the sixth document in QuantClaw's maturity framework. The five before it
 > addressed architecture, documentation, governance, engineering infrastructure, and
 > collaboration — the structural and human scaffolding that surrounds the work. Each
 > one answered a different question about how we build this project together. If you
@@ -42,7 +42,7 @@
 
 ## The Maturity Framework Suite
 
-This RFC is the sixth in a set of documents that together form ZeroClaw's maturity
+This RFC is the sixth in a set of documents that together form QuantClaw's maturity
 framework. They are designed to be read as a whole, though each stands on its own.
 
 | RFC | Scope | Issue |
@@ -115,7 +115,7 @@ A contributor who has internalized the judgment behind the rules will apply it c
 to situations the rules did not anticipate — including the situations that matter most,
 which are always the ones nobody planned for.
 
-This distinction matters especially in this project's context. ZeroClaw is operated in
+This distinction matters especially in this project's context. QuantClaw is operated in
 an environment of powerful tools: AI code generation, CI gates that catch a wide range
 of common errors, IDE linters, automated security scanners. These tools are genuinely
 valuable. They define a floor — a minimum below which code should not be merged. But
@@ -299,7 +299,7 @@ with no useful context and no opportunity to recover.
 The correct response is to fail fast — but specifically. Not a panic with a stack trace,
 not a vague "invalid config" message. A message that points at the specific field,
 explains what was expected, and tells the operator what to provide. A user who cannot
-start ZeroClaw because of a misconfiguration should leave the process with a clear
+start QuantClaw because of a misconfiguration should leave the process with a clear
 understanding of exactly what to fix.
 
 | Failure kind | What it means | Correct response |
@@ -498,7 +498,7 @@ Three principles that should guide any code written near a trust boundary:
 arrives from outside your direct control: user input from any channel, API responses
 from providers, file contents from the filesystem, plugin outputs, tool results, hardware
 readings. At every trust boundary, validate before you process. Do not assume the shape,
-size, type, or content of data you did not produce. The ZeroClaw security model defines
+size, type, or content of data you did not produce. The QuantClaw security model defines
 these boundaries at the policy level. The implementation should reflect them at the code
 level — not because the policy will fail, but because defense in depth means each layer
 of the system is doing its part, rather than trusting that every other layer did theirs.
@@ -588,7 +588,7 @@ let _span = span!(
 
 Structured logging and meaningful span design are not style preferences. They are what
 make the observability infrastructure you have actually useful — not just during
-development, but in the hands of users running ZeroClaw on hardware you will never see,
+development, but in the hands of users running QuantClaw on hardware you will never see,
 in configurations you did not anticipate, encountering errors you did not plan for. The
 infrastructure creates the capability. The discipline in how contributors use it
 determines whether that capability translates into diagnosable systems.

@@ -1,6 +1,6 @@
 # Privacy and PII Discipline
 
-ZeroClaw artifacts are public — git history, releases, fixtures, snapshots, the docs book, every rendered locale. Anything you commit ships with the project forever. Treat privacy as a merge gate, not best-effort.
+QuantClaw artifacts are public — git history, releases, fixtures, snapshots, the docs book, every rendered locale. Anything you commit ships with the project forever. Treat privacy as a merge gate, not best-effort.
 
 ## Never commit any of these
 
@@ -31,7 +31,7 @@ Test names, assertion messages, and fixture content stay impersonal and system-f
 
 ## When you have to reference identity
 
-If a test or doc genuinely needs a role-shaped identity, use ZeroClaw-scoped roles only: `ZeroClawAgent`, `ZeroClawOperator`, `ZeroClawMaintainer`. Don't borrow real names, even pseudonyms — pseudonyms drift back into being real over time.
+If a test or doc genuinely needs a role-shaped identity, use QuantClaw-scoped roles only: `ZeroClawAgent`, `ZeroClawOperator`, `ZeroClawMaintainer`. Don't borrow real names, even pseudonyms — pseudonyms drift back into being real over time.
 
 GitHub `@`-mentions in PR/issue comments are different — addressing a contributor by their handle is how you talk to people on GitHub, and `@WareWolf-MoonWall` is not a privacy violation. The rule is about **content stored in the repo** (code, tests, fixtures, docs), not about conversation in PR/issue threads.
 

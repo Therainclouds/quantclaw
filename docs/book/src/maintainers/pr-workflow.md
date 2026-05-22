@@ -44,7 +44,7 @@ Before requesting review, the PR has all of these:
 - Validation evidence attached — actual command output, not "CI will check."
 - Security & privacy and rollback fields completed for risky paths.
 - Privacy and data-hygiene rules satisfied — neutral, project-scoped test wording. See [Privacy](../contributing/privacy.md).
-- Identity-like wording, where unavoidable, uses ZeroClaw / project-native labels.
+- Identity-like wording, where unavoidable, uses QuantClaw / project-native labels.
 
 ## Definition of Done (DoD)
 

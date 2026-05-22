@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/crates/tauri-cli/config.schema.json",
-  "productName": "ZeroClaw",
+  "productName": "QuantClaw",
   "version": "0.8.0-beta-1",
   "identifier": "ai.zeroclawlabs.desktop",
   "build": {
@@ -12,7 +12,7 @@
       {
         "label": "main",
         "url": "http://127.0.0.1:42617/_app/",
-        "title": "ZeroClaw",
+        "title": "QuantClaw",
         "width": 1200,
         "height": 800,
         "resizable": true,
@@ -22,7 +22,7 @@
       {
         "label": "onboarding",
         "url": "index.html",
-        "title": "Welcome to ZeroClaw",
+        "title": "Welcome to QuantClaw",
         "width": 760,
         "height": 640,
         "minWidth": 560,

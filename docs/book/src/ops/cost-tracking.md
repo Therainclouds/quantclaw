@@ -1,6 +1,6 @@
 # Cost tracking
 
-ZeroClaw records every priced API call to an append-only ledger,
+QuantClaw records every priced API call to an append-only ledger,
 attributes spend to the originating agent, enforces daily / monthly
 budgets, and surfaces the rollup on the dashboard `Cost` tab. The
 pricing rules live in config so operators can edit them without a

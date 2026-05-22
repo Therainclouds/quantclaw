@@ -1,6 +1,6 @@
 # Docs & Translations
 
-ZeroClaw has two independent translation layers:
+QuantClaw has two independent translation layers:
 
 | Layer | Format | What it covers |
 |---|---|---|

@@ -27,7 +27,7 @@
   <rect width="1100" height="950" rx="12" fill="url(#bgGrad)"/>
 
   <!-- Title -->
-  <text x="550" y="38" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="700">ZeroClaw Architecture</text>
+  <text x="550" y="38" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="700">QuantClaw Architecture</text>
   <text x="550" y="58" text-anchor="middle" fill="#7d8590" font-size="12">Zero overhead. Zero compromise. 100% Rust. 100% Agnostic. 8 pluggable traits.</text>
 
   <!-- ═══════════ LEFT: Chat Apps ═══════════ -->

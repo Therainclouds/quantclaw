@@ -54,7 +54,7 @@ When `webhook_secret` is set, inbound requests must carry:
 - `X-Nextcloud-Talk-Random` header
 - `X-Nextcloud-Talk-Signature` header
 
-ZeroClaw verifies:
+QuantClaw verifies:
 
 ```
 expected_sig = hex(hmac_sha256(secret, random + raw_request_body))
@@ -76,7 +76,7 @@ Without a secret, no verification — don't expose this endpoint publicly in tha
 
 1. Set `allowed_users = ["*"]` for first-time testing
 2. Send a test message in the configured Talk room
-3. Confirm ZeroClaw receives and replies in the same room
+3. Confirm QuantClaw receives and replies in the same room
 4. Tighten `allowed_users` to explicit actor IDs (e.g. `["alice", "bob"]`)
 
 ## Troubleshooting

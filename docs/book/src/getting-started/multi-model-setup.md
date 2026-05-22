@@ -102,11 +102,11 @@ risk_profile   = "hardened"
 level = "supervised"
 ```
 
-If your goal is "one provider goes down, automatically use another", that's OpenRouter's job — not ZeroClaw's. The runtime sees one provider; OpenRouter does the cross-vendor work upstream.
+If your goal is "one provider goes down, automatically use another", that's OpenRouter's job — not QuantClaw's. The runtime sees one provider; OpenRouter does the cross-vendor work upstream.
 
 ## Same-vendor retry
 
-For transient errors (network blip, 503, timeout) against the *same* provider, ZeroClaw retries with exponential backoff. This is configurable globally:
+For transient errors (network blip, 503, timeout) against the *same* provider, QuantClaw retries with exponential backoff. This is configurable globally:
 
 ```toml
 [reliability]
@@ -118,7 +118,7 @@ Defaults are 2 retries, 500 ms initial backoff. These are inside-one-provider re
 
 ## API key rotation
 
-For providers that frequently encounter rate limits, supply additional API keys that ZeroClaw will rotate through on `429` responses:
+For providers that frequently encounter rate limits, supply additional API keys that QuantClaw will rotate through on `429` responses:
 
 ```toml
 [reliability]

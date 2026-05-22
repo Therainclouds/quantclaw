@@ -1,12 +1,12 @@
 # LINE
 
-ZeroClaw supports LINE via the Messaging API — receiving messages through an embedded webhook server and replying via the Reply API (with Push API fallback when the reply token has expired).
+QuantClaw supports LINE via the Messaging API — receiving messages through an embedded webhook server and replying via the Reply API (with Push API fallback when the reply token has expired).
 
 ## Prerequisites
 
 1. A [LINE Developers Console](https://developers.line.biz) account.
 2. A public HTTPS endpoint reachable from LINE's servers (or ngrok for local development).
-3. ZeroClaw built with LINE channel support enabled (the `channel-line` feature on the `zeroclaw-channels` crate).
+3. QuantClaw built with LINE channel support enabled (the `channel-line` feature on the `zeroclaw-channels` crate).
 
 ---
 
@@ -21,7 +21,7 @@ ZeroClaw supports LINE via the Messaging API — receiving messages through an e
 
 ---
 
-## 2. Configure ZeroClaw
+## 2. Configure QuantClaw
 
 Configure the LINE channel under `[channels.line]` with at minimum `channel_access_token` and `channel_secret`. See the [Config reference](../reference/config.md) for the full field index, defaults, and the `dm_policy` / `group_policy` enums (whose user-facing semantics are also covered in §6 below).
 
@@ -59,11 +59,11 @@ Copy the `https://` URL ngrok provides (e.g. `https://abc123.ngrok.io`).
 1. Go to your channel → **Messaging API** tab → **Webhook settings**.
 2. Set **Webhook URL** to `https://your-domain.com/line/webhook`.
 3. Toggle **Use webhook** to on.
-4. Click **Verify** — LINE will send a test request. ZeroClaw must be running for verification to succeed.
+4. Click **Verify** — LINE will send a test request. QuantClaw must be running for verification to succeed.
 
 ---
 
-## 5. Start ZeroClaw
+## 5. Start QuantClaw
 
 ```bash
 ./target/release/zeroclaw --config zeroclaw.toml
@@ -89,15 +89,15 @@ LINE: webhook server listening on http://0.0.0.0:8443/line/webhook
 
 | Value | Behaviour |
 |---|---|
-| `pairing` (default) | The bot ignores all DMs until the user sends `/bind <code>`. A pairing code is displayed in the ZeroClaw log at startup. |
+| `pairing` (default) | The bot ignores all DMs until the user sends `/bind <code>`. A pairing code is displayed in the QuantClaw log at startup. |
 | `open` | The bot responds to every DM immediately. |
 | `allowlist` | The bot responds only to LINE user IDs listed in `allowed_users`. |
 
 **Pairing workflow:**
 
-1. ZeroClaw prints a pairing code in the log at startup.
+1. QuantClaw prints a pairing code in the log at startup.
 2. The user opens a LINE DM with the bot and sends `/bind <code>`.
-3. ZeroClaw confirms the pairing; subsequent DMs are accepted.
+3. QuantClaw confirms the pairing; subsequent DMs are accepted.
 
 ### Group / multi-person chat — `group_policy`
 
@@ -121,7 +121,7 @@ The maximum accepted audio size is 25 MB. Larger files are silently skipped with
 
 | Symptom | Likely cause | Action |
 |---|---|---|
-| LINE Verify fails | ZeroClaw not running, or port not reachable | Confirm the process is up and the port is accessible from the internet |
+| LINE Verify fails | QuantClaw not running, or port not reachable | Confirm the process is up and the port is accessible from the internet |
 | Bot does not reply to DMs | `dm_policy = pairing` and user has not run `/bind` | User must send `/bind <code>` first, or switch to `dm_policy = open` |
 | Bot does not reply in groups | `group_policy = mention` and message has no @mention | @mention the bot, or switch to `group_policy = open` |
 | Reply arrives as a push message | Reply token expired (~30 s window) | Expected fallback behaviour — no action required |

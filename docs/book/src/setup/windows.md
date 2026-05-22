@@ -8,7 +8,7 @@ Install, update, run as a scheduled task / Windows Service, and uninstall on Win
 
 ### Option 1 — `setup.bat` from a release
 
-Download the latest ZeroClaw release, unzip, and run:
+Download the latest QuantClaw release, unzip, and run:
 
 ```cmd
 setup.bat
@@ -140,7 +140,7 @@ rmdir /s /q "%LOCALAPPDATA%\ZeroClaw"
 
 - **Long paths.** Some Windows file systems still cap path lengths at 260 characters. Enable long path support if you hit `path too long` errors during build (`reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f`).
 - **SmartScreen.** The unsigned binary may trip SmartScreen on first launch. Right-click → Properties → "Unblock" is the standard workaround until we add a signed MSI.
-- **Task Scheduler stop-at-idle.** By default Windows may terminate scheduled tasks on idle / battery. The installed task explicitly disables these conditions; verify under Task Scheduler → ZeroClaw → Properties → Conditions.
+- **Task Scheduler stop-at-idle.** By default Windows may terminate scheduled tasks on idle / battery. The installed task explicitly disables these conditions; verify under Task Scheduler → QuantClaw → Properties → Conditions.
 
 ## Next
 

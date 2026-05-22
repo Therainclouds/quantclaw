@@ -4,7 +4,7 @@ This page documents the architecture and operator-facing surface of the multi-ag
 
 ## Vocabulary
 
-- **Install dir** — the directory holding everything ZeroClaw owns on a host. Typically `~/.zeroclaw/`. Equivalent to the dir containing `config.toml`.
+- **Install dir** — the directory holding everything QuantClaw owns on a host. Typically `~/.zeroclaw/`. Equivalent to the dir containing `config.toml`.
 - **Agent** — a configured `[agents.<alias>]` block: a join table of references (`risk_profile`, `model_provider`, `channels`), a per-agent workspace dir, and a per-agent memory backend selection. Each agent picks one memory backend at creation; that choice is immutable for the agent's lifetime.
 - **Aliased workspace** — `<install>/agents/<alias>/workspace/`. One per agent. Holds the agent's identity files (`AGENTS.md`, `SOUL.md`, `IDENTITY.md`, `USER.md`, `BOOTSTRAP.md`, `MEMORY.md`) and any operator data the agent owns.
 - **SubAgent** — a runtime-spawned ephemeral child run that inherits its parent's identity, security policy, and memory allowlist. See [SubAgents](./subagents.md) for the full surface (lifecycle, spawn sites, the depth-1 cap, what gets returned to the parent).

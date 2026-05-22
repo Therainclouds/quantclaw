@@ -41,7 +41,7 @@ Full per-distro list: [Setup → Linux](../setup/linux.md).
 
 ### Build OOMs on low-RAM hosts
 
-Compiling ZeroClaw from source needs ~2 GB RAM at peak. On a 512 MB Raspberry Pi, you will OOM.
+Compiling QuantClaw from source needs ~2 GB RAM at peak. On a 512 MB Raspberry Pi, you will OOM.
 
 Options:
 
@@ -142,7 +142,7 @@ Notes:
 
 - Subscription auth uses stored auth profiles — set `requires_openai_auth = true` on the alias and leave `api_key` unset.
 - `api_key` / `uri` on the alias entry are only needed for custom OpenAI-compatible gateways or other explicit endpoint overrides.
-- The streaming-disabled warning by itself is not an auth failure; ZeroClaw retries the request in non-streaming mode.
+- The streaming-disabled warning by itself is not an auth failure; QuantClaw retries the request in non-streaming mode.
 
 ### Daemon starts, then immediately exits
 
@@ -244,7 +244,7 @@ See [Security → Autonomy levels](../security/autonomy.md).
 ### Tool invocations fail inside Docker sandbox
 
 - Container image isn't pulled — run `docker pull <image>` for whatever you have configured under `[security.sandbox].image` (default: `alpine:latest`)
-- Docker daemon not reachable from the ZeroClaw user — check `docker info`
+- Docker daemon not reachable from the QuantClaw user — check `docker info`
 - Tool needs a device that's not passed through — extend `allow_devices`
 
 ### Browser tool hangs on first use

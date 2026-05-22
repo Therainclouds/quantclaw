@@ -1,6 +1,6 @@
 # Provider Catalog
 
-Every model-provider family ZeroClaw ships with. For each: config shape, notes on auth and endpoint behavior, and the slot key to use under `[providers.models.<type>.<alias>]`.
+Every model-provider family QuantClaw ships with. For each: config shape, notes on auth and endpoint behavior, and the slot key to use under `[providers.models.<type>.<alias>]`.
 
 See [Configuration](./configuration.md) for universal fields (`api_key`, `uri`, `model`, ...) and resolution order.
 

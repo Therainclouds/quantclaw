@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('[ZeroClaw] Render error:', error, info.componentStack);
+    console.error('[QuantClaw] Render error:', error, info.componentStack);
     // Stale-chunk recovery: when Vite rebuilds, the loaded index.html
     // still references the previous chunk hashes. A dynamic import for
     // a lazy route then 404s with "error loading dynamically imported
@@ -149,11 +149,11 @@ function PairingDialog({ onPair }: { onPair: (code: string) => Promise<void> }) 
         <div className="text-center mb-8">
           <img
             src={`${basePath}/_app/zeroclaw-trans.png`}
-            alt="ZeroClaw"
+            alt="QuantClaw"
             className="h-20 w-20 rounded-2xl object-cover mx-auto mb-4 animate-float"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />
-          <h1 className="text-2xl font-bold mb-2 text-gradient-blue">ZeroClaw</h1>
+          <h1 className="text-2xl font-bold mb-2 text-gradient-blue">QuantClaw</h1>
           <p className="text-sm" style={{ color: 'var(--pc-text-muted)' }}>
             {displayCode ? 'Your pairing code — click Pair to connect' : 'Enter the pairing code from your terminal'}
           </p>

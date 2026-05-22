@@ -1,6 +1,6 @@
 # Docker & Containers
 
-Run ZeroClaw in Docker, Podman, Kubernetes, or any OCI runtime.
+Run QuantClaw in Docker, Podman, Kubernetes, or any OCI runtime.
 
 ## Official images
 
@@ -114,7 +114,7 @@ spec:
             claimName: zeroclaw-data
 ```
 
-**Scaling:** ZeroClaw is single-writer per workspace. Don't scale horizontally — run one instance per agent.
+**Scaling:** QuantClaw is single-writer per workspace. Don't scale horizontally — run one instance per agent.
 
 ## Re-authenticating after logout
 

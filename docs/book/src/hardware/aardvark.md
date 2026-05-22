@@ -85,7 +85,7 @@ Drop(handle)
 
 **File:** `crates/zeroclaw-hardware/src/aardvark.rs`
 
-The rest of ZeroClaw speaks a single language: `ZcCommand` → `ZcResponse`.
+The rest of QuantClaw speaks a single language: `ZcCommand` → `ZcResponse`.
 `AardvarkTransport` translates between that protocol and the aardvark-sys calls above.
 
 **Algorithm:**

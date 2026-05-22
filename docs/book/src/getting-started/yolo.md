@@ -1,6 +1,6 @@
 # YOLO Mode
 
-**YOLO mode** disables every safety gate ZeroClaw ships with. No approval prompts, no workspace boundary, no shell policy, no command allow/denylist, no OTP, no sandbox. The agent can run any shell command, touch any file, hit any URL — immediately, without asking.
+**YOLO mode** disables every safety gate QuantClaw ships with. No approval prompts, no workspace boundary, no shell policy, no command allow/denylist, no OTP, no sandbox. The agent can run any shell command, touch any file, hit any URL — immediately, without asking.
 
 > **This is for dev boxes, home labs, and throwaway VMs.** Do not run YOLO mode on shared infrastructure. Do not run YOLO mode on a machine with production credentials in its environment. Do not run YOLO mode if you do not understand what an autonomous agent with `rm -rf` access can do.
 
@@ -77,7 +77,7 @@ block_high_risk_commands         = true
 | Workspace boundary | Agent can only touch `~/.zeroclaw/workspace/` | Agent can touch any path its user can |
 | Shell policy | Unknown commands blocked | Any command executes |
 | Forbidden paths | `/etc`, `/sys`, `/boot`, `~/.ssh` etc. blocked | No path is off-limits |
-| Sandbox | Docker / Firejail / Landlock / Seatbelt isolates tool execution | Tools run as the ZeroClaw process user |
+| Sandbox | Docker / Firejail / Landlock / Seatbelt isolates tool execution | Tools run as the QuantClaw process user |
 | OTP gating | Gated actions require a code | No gate |
 | Emergency stop | `zeroclaw estop` halts running ops | No halt semantics beyond `SIGTERM` |
 | Gateway pairing | Clients must pair first | Anyone who reaches the port owns the agent |

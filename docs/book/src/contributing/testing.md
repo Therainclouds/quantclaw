@@ -1,6 +1,6 @@
 # Testing
 
-ZeroClaw uses a five-level testing taxonomy backed by filesystem layout. Each level has a different boundary and a different cost — pick the lowest level that proves what you need to prove.
+QuantClaw uses a five-level testing taxonomy backed by filesystem layout. Each level has a different boundary and a different cost — pick the lowest level that proves what you need to prove.
 
 ## The five levels
 

@@ -53,7 +53,7 @@ Every project without an intentional coordination system develops an accidental 
 
 This is not a criticism of anyone's effort. It is a description of what happens by default. The solution is not more process — it is the right process, applied at the right level for the size and maturity of the team.
 
-ZeroClaw needs three things:
+QuantClaw needs three things:
 
 1. **A pipeline** for turning ideas into shipped code, with visible stages and clear gates at each transition
 2. **A parking lot** for capturing ideas that are not ready for the pipeline yet, without losing them or cluttering the active work
@@ -198,7 +198,7 @@ Enable GitHub Discussions on the repository. Create the following categories:
 | ❓ **Q&A** | Question/Answer | How do I do X? Answered by contributors and core team |
 | 🐛 **Bug Reports (pre-triage)** | Open-ended discussion | For bug reports that need more information before becoming issues |
 | 🌐 **Translations** | Open-ended discussion | Community-maintained translations and localization coordination |
-| 🎉 **Show and Tell** | Open-ended discussion | What are you building with ZeroClaw? Community showcases |
+| 🎉 **Show and Tell** | Open-ended discussion | What are you building with QuantClaw? Community showcases |
 
 ### 4.2 The Idea-to-Issue Promotion Process
 
@@ -1070,6 +1070,6 @@ By v1.0.0, the governance model should be self-sustaining — the team should no
 
 ---
 
-*This proposal was developed in the context of ZeroClaw v0.6.8 and the two preceding architecture and documentation RFCs. The governance model proposed here is intentionally lightweight for a student-led project at an early stage of community growth. It is designed to scale — adding process as the team grows, not all at once.*
+*This proposal was developed in the context of QuantClaw v0.6.8 and the two preceding architecture and documentation RFCs. The governance model proposed here is intentionally lightweight for a student-led project at an early stage of community growth. It is designed to scale — adding process as the team grows, not all at once.*
 
 *The best governance model is the simplest one the team will actually follow. Start here. Adjust based on what you learn.*

@@ -1,6 +1,6 @@
 # Custom Providers
 
-Three ways to add a provider ZeroClaw doesn't ship with:
+Three ways to add a provider QuantClaw doesn't ship with:
 
 1. **Use the `custom` slot.** For any OpenAI-compatible endpoint not covered by an existing canonical slot.
 2. **Use the first-class local-server slots** (`lmstudio`, `llamacpp`, `sglang`, `vllm`, `osaurus`, `litellm`). Thin wrappers with sensible defaults.
@@ -29,7 +29,7 @@ This is the same `OpenAiCompatibleModelProvider` runtime impl used by `groq`, `m
 
 ## First-class local-inference servers
 
-ZeroClaw ships canonical slots for popular local-inference stacks. They're all OpenAI-compatible under the hood but with default `uri` values pre-applied so you can usually omit `uri` entirely.
+QuantClaw ships canonical slots for popular local-inference stacks. They're all OpenAI-compatible under the hood but with default `uri` values pre-applied so you can usually omit `uri` entirely.
 
 ### llama.cpp — slot `llamacpp`
 
@@ -157,7 +157,7 @@ See `anthropic.rs` as a reference for a provider with a fully custom wire format
 
 - Verify the API key matches the endpoint (many vendors use key prefixes — `sk-`, `gsk_`, `sk-ant-`).
 - Check that `uri` includes the scheme (`http://` / `https://`) and the `/v1` path if the endpoint expects it.
-- Endpoints behind a VPN or proxy? Confirm routing from the ZeroClaw host.
+- Endpoints behind a VPN or proxy? Confirm routing from the QuantClaw host.
 
 ### Model not found
 

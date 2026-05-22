@@ -1,6 +1,6 @@
 # Service Management
 
-ZeroClaw ships with first-class service integration for systemd (Linux), launchctl (macOS), and Task Scheduler / Windows Service (Windows). All three are driven by one CLI surface:
+QuantClaw ships with first-class service integration for systemd (Linux), launchctl (macOS), and Task Scheduler / Windows Service (Windows). All three are driven by one CLI surface:
 
 ```bash
 zeroclaw service install     # register the service
@@ -43,7 +43,7 @@ journalctl --user -u zeroclaw --since "1h ago"
 
 ### System-scope (root) service
 
-If you need ZeroClaw to start before user login (headless SBCs, VPSes), run the install command as root:
+If you need QuantClaw to start before user login (headless SBCs, VPSes), run the install command as root:
 
 ```bash
 sudo zeroclaw service install
@@ -94,7 +94,7 @@ Don't mix `zeroclaw service` CLI commands with `brew services` — pick one. Bot
 - Condition: battery, idle, and power-save conditions are **all disabled** (otherwise the task would stop unexpectedly)
 - Action: run `zeroclaw daemon` hidden
 
-Verify in Task Scheduler GUI (`taskschd.msc`) under Task Scheduler Library → ZeroClaw.
+Verify in Task Scheduler GUI (`taskschd.msc`) under Task Scheduler Library → QuantClaw.
 
 Logs go to `%LOCALAPPDATA%\ZeroClaw\logs\`:
 

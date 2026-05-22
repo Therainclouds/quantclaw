@@ -1,12 +1,12 @@
 # Network Deployment
 
-Deploying ZeroClaw so it can receive inbound traffic: gateway exposure, webhook channels, tunnels, and LAN-only vs. public-facing configurations. Raspberry Pis and other home-network hosts are first-class targets here.
+Deploying QuantClaw so it can receive inbound traffic: gateway exposure, webhook channels, tunnels, and LAN-only vs. public-facing configurations. Raspberry Pis and other home-network hosts are first-class targets here.
 
 ## When inbound ports matter
 
 | Mode | Needs inbound port | Notes |
 |---|:---:|---|
-| Telegram (long-poll) | No | ZeroClaw polls `api.telegram.org` — works behind NAT |
+| Telegram (long-poll) | No | QuantClaw polls `api.telegram.org` — works behind NAT |
 | Matrix / Mattermost / Nextcloud Talk | No | Sync/WebSocket — outbound only |
 | Discord / Slack (Socket Mode) | No | Outbound WebSocket |
 | Signal (`signal-cli-rest-api`) | No | Localhost container |

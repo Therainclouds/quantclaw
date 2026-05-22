@@ -1,6 +1,6 @@
 # Operations — Overview
 
-How to run ZeroClaw in production. The surface is intentionally small: one binary, one config file, one SQLite workspace. Most "operations" is "systemd and journald".
+How to run QuantClaw in production. The surface is intentionally small: one binary, one config file, one SQLite workspace. Most "operations" is "systemd and journald".
 
 This section covers:
 
@@ -11,7 +11,7 @@ This section covers:
 
 ## The shape of a deployment
 
-A typical always-on ZeroClaw install is:
+A typical always-on QuantClaw install is:
 
 ```
 zeroclaw service (systemd / launchctl / Windows Service)
@@ -99,7 +99,7 @@ Blocks and denials are worth looking at — if the agent is repeatedly hitting t
 
 ## Capacity
 
-A single ZeroClaw instance can handle:
+A single QuantClaw instance can handle:
 
 - Multiple concurrent conversations across all channels
 - Tool calls at whatever rate the provider and sandbox allow

@@ -1,12 +1,12 @@
-# ZeroClaw on Arduino Uno Q — Step-by-Step Guide
+# QuantClaw on Arduino Uno Q — Step-by-Step Guide
 
-Run ZeroClaw on the Arduino Uno Q's Linux side. Telegram works over WiFi; GPIO control uses the Bridge (requires a minimal App Lab app).
+Run QuantClaw on the Arduino Uno Q's Linux side. Telegram works over WiFi; GPIO control uses the Bridge (requires a minimal App Lab app).
 
 ---
 
 ## What's Included (No Code Changes Needed)
 
-ZeroClaw includes everything needed for Arduino Uno Q. **Clone the repo and follow this guide — no patches or custom code required.**
+QuantClaw includes everything needed for Arduino Uno Q. **Clone the repo and follow this guide — no patches or custom code required.**
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
@@ -50,7 +50,7 @@ ssh arduino@<UNO_Q_IP>
 
 ---
 
-## Phase 2: Install ZeroClaw on Uno Q
+## Phase 2: Install QuantClaw on Uno Q
 
 ### Option A: Build on the Device (Simpler, ~20–40 min)
 
@@ -100,7 +100,7 @@ If cross-compile fails, use Option A and build on the device.
 
 ---
 
-## Phase 3: Configure ZeroClaw
+## Phase 3: Configure QuantClaw
 
 ### 3.1 Run Onboard (or Create Config Manually)
 
@@ -121,7 +121,7 @@ At minimum, configure one `[providers.models.<type>.<alias>]` entry with `api_ke
 
 ---
 
-## Phase 4: Run ZeroClaw Daemon
+## Phase 4: Run QuantClaw Daemon
 
 ```bash
 ssh arduino@<UNO_Q_IP>
@@ -130,13 +130,13 @@ ssh arduino@<UNO_Q_IP>
 zeroclaw daemon --host 127.0.0.1 --port 42617
 ```
 
-**At this point:** Telegram chat works. Send messages to your bot — ZeroClaw responds. No GPIO yet.
+**At this point:** Telegram chat works. Send messages to your bot — QuantClaw responds. No GPIO yet.
 
 ---
 
-## Phase 5: GPIO via Bridge (ZeroClaw Handles It)
+## Phase 5: GPIO via Bridge (QuantClaw Handles It)
 
-ZeroClaw includes the Bridge app and setup command.
+QuantClaw includes the Bridge app and setup command.
 
 ### 5.1 Deploy Bridge App
 
@@ -156,13 +156,13 @@ This copies the Bridge app to `~/ArduinoApps/uno-q-bridge` and starts it.
 
 Enable `[peripherals]` and add a `[[peripherals.boards]]` entry with `board = "arduino-uno-q"` and `transport = "bridge"`.
 
-### 5.3 Run ZeroClaw
+### 5.3 Run QuantClaw
 
 ```bash
 zeroclaw daemon --host 127.0.0.1 --port 42617
 ```
 
-Now when you message your Telegram bot *"Turn on the LED"* or *"Set pin 13 high"*, ZeroClaw uses `gpio_write` via the Bridge.
+Now when you message your Telegram bot *"Turn on the LED"* or *"Set pin 13 high"*, QuantClaw uses `gpio_write` via the Bridge.
 
 ---
 
@@ -192,4 +192,4 @@ Now when you message your Telegram bot *"Turn on the LED"* or *"Set pin 13 high"
 - **Telegram not responding** — Check bot_token, allowed_users, and that the Uno Q has internet (WiFi).
 - **Out of memory** — Keep features minimal (`--features hardware` for Uno Q); consider `compact_context = true`.
 - **GPIO commands ignored** — Ensure Bridge app is running (`zeroclaw peripheral setup-uno-q` deploys and starts it). Config must have `board = "arduino-uno-q"` and `transport = "bridge"`.
-- **LLM provider (GLM/Zhipu)** — Configure `[providers.models.glm.<alias>]` with `GLM_API_KEY` in env or config (the legacy `zhipu` synonym is collapsed onto `glm`). ZeroClaw uses the correct v4 endpoint.
+- **LLM provider (GLM/Zhipu)** — Configure `[providers.models.glm.<alias>]` with `GLM_API_KEY` in env or config (the legacy `zhipu` synonym is collapsed onto `glm`). QuantClaw uses the correct v4 endpoint.

@@ -37,7 +37,7 @@ Without an answer to that question, documentation accumulates as a pile of pages
 
 The fix is not to write more documentation. The fix is to decide, before writing anything, what type of artifact you are creating. Type determines format, audience, location, lifecycle, and who is responsible for keeping it current. Once type is established, the rest follows naturally.
 
-This RFC adopts the **EA Artifacts on a Page** framework by Svyatoslav Kotusev (https://eaonapage.com) as the classification lens for all ZeroClaw documentation. The framework is evidence-based, deliberately non-prescriptive, and maps directly onto the kinds of documents an open source infrastructure project actually needs.
+This RFC adopts the **EA Artifacts on a Page** framework by Svyatoslav Kotusev (https://eaonapage.com) as the classification lens for all QuantClaw documentation. The framework is evidence-based, deliberately non-prescriptive, and maps directly onto the kinds of documents an open source infrastructure project actually needs.
 
 The core principle, borrowed from the broader development philosophy this team is adopting:
 
@@ -95,9 +95,9 @@ The `docs-contract.md` concept — treating documentation as a governed product 
 
 ## 3. A Classification Framework: EA Artifacts on a Page
 
-The **EA Artifacts on a Page** framework defines five families of architecture artifacts. Every document in the ZeroClaw repository should belong to one of these families, and that family determines everything about where it lives, how it is formatted, and when it becomes stale.
+The **EA Artifacts on a Page** framework defines five families of architecture artifacts. Every document in the QuantClaw repository should belong to one of these families, and that family determines everything about where it lives, how it is formatted, and when it becomes stale.
 
-| EA Artifact Family | The Question It Answers | Examples in ZeroClaw | Location |
+| EA Artifact Family | The Question It Answers | Examples in QuantClaw | Location |
 |---|---|---|---|
 | **Considerations** | What principles and standards guide our decisions? | `AGENTS.md` files, coding standards, security policy, this doc | `docs/book/src/contributing/` or per-crate |
 | **Landscapes** | What does the system look like right now? | Component maps, crate topology, dependency diagrams | `docs/book/src/architecture/` |
@@ -124,7 +124,7 @@ A useful test for the second question: *would this document become wrong or misl
 
 The case for removing all non-English content from the repository rests on four pillars:
 
-**1. The audience has on-demand translation.** ZeroClaw's primary users are people running an AI assistant. Every such person has access to instant, high-quality machine translation — either through the agent they are running, through their browser, or through any of dozens of free translation services. The practical benefit of shipping translations in the repository is marginal.
+**1. The audience has on-demand translation.** QuantClaw's primary users are people running an AI assistant. Every such person has access to instant, high-quality machine translation — either through the agent they are running, through their browser, or through any of dozens of free translation services. The practical benefit of shipping translations in the repository is marginal.
 
 **2. The translations are almost certainly stale.** Machine-translated content was likely generated once and has not been kept synchronised with the English source. Stale documentation is worse than no documentation for AI-assisted development, because language models will confidently derive incorrect conclusions from outdated information.
 
@@ -134,7 +134,7 @@ The case for removing all non-English content from the repository rests on four 
 
 ### 4.2 What Stays
 
-One thing worth preserving: the _structure_ of the i18n approach. The idea of making ZeroClaw accessible in multiple languages is right. Only the _location_ and _ownership model_ is wrong.
+One thing worth preserving: the _structure_ of the i18n approach. The idea of making QuantClaw accessible in multiple languages is right. Only the _location_ and _ownership model_ is wrong.
 
 ### 4.3 The Replacement Strategy
 
@@ -603,7 +603,7 @@ These documentation-specific standards complement the broader standards proposed
 
 **How it applies:** User-facing documentation on the Wiki should follow Diátaxis structure. Code-adjacent documentation in the repository follows EA Artifacts. The two frameworks operate at different levels and do not conflict.
 
-| Diátaxis Type | Purpose | Example in ZeroClaw | Location |
+| Diátaxis Type | Purpose | Example in QuantClaw | Location |
 |---|---|---|---|
 | **Tutorial** | Learning-oriented, leads through an experience | "Build your first tool plugin" | Wiki |
 | **How-to Guide** | Goal-oriented, solves a specific problem | "Set up Telegram integration" | Wiki |
@@ -752,6 +752,6 @@ The documentation migration follows the same Strangler Fig pattern as the archit
 
 ---
 
-*This proposal was developed from direct analysis of the ZeroClaw documentation system at v0.6.8. The metrics cited (169 i18n files, 2.2 MB, 31 language README variants) are based on direct measurement. The recommendations reflect established practices in technical documentation for open source infrastructure projects, adapted to the specific constraints and goals of ZeroClaw.*
+*This proposal was developed from direct analysis of the QuantClaw documentation system at v0.6.8. The metrics cited (169 i18n files, 2.2 MB, 31 language README variants) are based on direct measurement. The recommendations reflect established practices in technical documentation for open source infrastructure projects, adapted to the specific constraints and goals of QuantClaw.*
 
 *Feedback, corrections, and counterproposals are welcome. Good documentation is a community effort, and the best structure is the one the team will actually maintain.*
