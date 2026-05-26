@@ -125,7 +125,7 @@ function RunHistoryPanel({ jobId, refreshKey = 0 }: { jobId: string; refreshKey?
         <button
           onClick={fetchRuns}
           className="btn-icon"
-          title="Refresh runs"
+          title={t('cron.refresh_runs')}
         >
           <RefreshCw className="h-3.5 w-3.5" />
         </button>
@@ -342,18 +342,18 @@ export default function Cron() {
     setFormError(null);
 
     if (!isEditing && !formAgent.trim()) {
-      setFormError(t('cron.agent_required_error') || 'Pick an agent for this cron job');
+      setFormError(t('cron.agent_required_error'));
       setSubmitting(false);
       return;
     }
     if (formDeliveryMode === 'announce') {
       if (!formDeliveryChannel.trim()) {
-        setFormError('Delivery channel is required when announce mode is selected');
+        setFormError(t('cron.delivery_channel_required'));
         setSubmitting(false);
         return;
       }
       if (!formDeliveryTo.trim()) {
-        setFormError('Delivery target (room id / user id / address) is required for announce mode');
+        setFormError(t('cron.delivery_target_required'));
         setSubmitting(false);
         return;
       }
@@ -617,7 +617,7 @@ export default function Cron() {
                     className="input-electric w-full px-3 py-2.5 text-sm appearance-none cursor-pointer"
                   >
                     {agentOptions.length === 0 ? (
-                      <option value="">no configured agents</option>
+                      <option value="">{t('cron.no_configured_agents')}</option>
                     ) : (
                       agentOptions.map((alias) => (
                         <option key={alias} value={alias}>
@@ -627,7 +627,7 @@ export default function Cron() {
                     )}
                   </select>
                   <p className="text-xs mt-1" style={{ color: 'var(--pc-text-faint)' }}>
-                    Runs under this agent's risk profile, model provider, and channel bindings.
+                    {t('cron.agent_help')}
                   </p>
                 </div>
               )}
@@ -635,19 +635,19 @@ export default function Cron() {
                 <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'var(--pc-text-secondary)' }}>
                   {t('cron.name_optional')}
                 </label>
-                <input type="text" value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="e.g. Daily cleanup" className="input-electric w-full px-3 py-2.5 text-sm" />
+                <input type="text" value={formName} onChange={(e) => setFormName(e.target.value)} placeholder={t('cron.name_placeholder')} className="input-electric w-full px-3 py-2.5 text-sm" />
               </div>
               <div>
                 <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'var(--pc-text-secondary)' }}>
                   {t('cron.schedule_required')} <span style={{ color: 'var(--color-status-error)' }}>*</span>
                 </label>
-                <input type="text" value={formSchedule} onChange={(e) => setFormSchedule(e.target.value)} placeholder="e.g. 0 0 * * * (cron expression)" className="input-electric w-full px-3 py-2.5 text-sm" />
+                <input type="text" value={formSchedule} onChange={(e) => setFormSchedule(e.target.value)} placeholder={t('cron.schedule_placeholder')} className="input-electric w-full px-3 py-2.5 text-sm" />
               </div>
               <div>
                 <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'var(--pc-text-secondary)' }}>
                   {t('cron.timezone')}
                 </label>
-                <input type="text" value={formTimezone} onChange={(e) => setFormTimezone(e.target.value)} placeholder="e.g. America/New_York" className="input-electric w-full px-3 py-2.5 text-sm font-mono" />
+                <input type="text" value={formTimezone} onChange={(e) => setFormTimezone(e.target.value)} placeholder={t('cron.timezone_placeholder')} className="input-electric w-full px-3 py-2.5 text-sm font-mono" />
               </div>
 
               {/* Conditional fields based on job type */}
@@ -659,7 +659,7 @@ export default function Cron() {
                   <textarea
                     value={formCommand}
                     onChange={(e) => setFormCommand(e.target.value)}
-                    placeholder="e.g. cleanup --older-than 7d"
+                    placeholder={t('cron.command_placeholder')}
                     rows={4}
                     className="input-electric w-full px-3 py-2.5 text-sm resize-y font-mono"
                   />
@@ -748,7 +748,7 @@ export default function Cron() {
               {!isEditing && (
                 <div className="border-t pt-4" style={{ borderColor: 'var(--pc-border)' }}>
                   <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'var(--pc-text-secondary)' }}>
-                    Delivery
+                    {t('cron.delivery')}
                   </label>
                   <div className="flex gap-2 mb-2">
                     <button
@@ -760,7 +760,7 @@ export default function Cron() {
                         }`}
                       style={formDeliveryMode === 'none' ? { background: 'rgba(0, 128, 255, 0.08)' } : { background: 'transparent' }}
                     >
-                      none
+                      {t('cron.delivery_none')}
                     </button>
                     <button
                       type="button"
@@ -771,7 +771,7 @@ export default function Cron() {
                         }`}
                       style={formDeliveryMode === 'announce' ? { background: 'rgba(0, 128, 255, 0.08)' } : { background: 'transparent' }}
                     >
-                      announce
+                      {t('cron.delivery_announce')}
                     </button>
                   </div>
                   {formDeliveryMode === 'announce' && (
@@ -783,8 +783,8 @@ export default function Cron() {
                       >
                         <option value="">
                           {boundChannels.length === 0
-                            ? 'no channels bound on this agent'
-                            : 'select a channel...'}
+                            ? t('cron.no_bound_channels')
+                            : t('cron.select_channel')}
                         </option>
                         {boundChannels.map((ch) => (
                           <option key={ch.composite} value={ch.composite}>
@@ -797,7 +797,7 @@ export default function Cron() {
                         type="text"
                         value={formDeliveryTo}
                         onChange={(e) => setFormDeliveryTo(e.target.value)}
-                        placeholder="target (room id, user id, channel id, address...)"
+                        placeholder={t('cron.delivery_target_placeholder')}
                         className="input-electric w-full px-3 py-2 text-sm font-mono"
                       />
                       <label className="flex items-center gap-2 text-xs" style={{ color: 'var(--pc-text-muted)' }}>
@@ -809,9 +809,7 @@ export default function Cron() {
                         best-effort: log on failure, don't mark the job as errored
                       </label>
                       <p className="text-xs" style={{ color: 'var(--pc-text-faint)' }}>
-                        Channels from <code className="font-mono">agents.{formAgent || '<agent>'}.channels</code>.
-                        Picking one that isn't configured yet is allowed; the scheduler will warn
-                        loudly when the job fires.
+                        {t('cron.delivery_help').replace('{agent}', formAgent || '<agent>')}
                       </p>
                     </div>
                   )}
@@ -890,7 +888,7 @@ export default function Cron() {
                           )
                         }
                         className="flex min-w-0 items-center gap-1 btn-icon max-w-full"
-                        title="Toggle run history"
+                        title={t('cron.toggle_history')}
                       >
                         {expandedJob === job.id ? (
                           <ChevronDown className="h-3.5 w-3.5 shrink-0" />

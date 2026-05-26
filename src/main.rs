@@ -143,19 +143,19 @@ fn print_no_command_help(cmd: clap::Command) -> Result<()> {
             "{}",
             crate::i18n::get_cli_string("cli-no-command-provided")
                 .as_deref()
-                .unwrap_or("No command provided.")
+                .unwrap_or("未提供命令。")
         );
         println!(
             "{}",
             crate::i18n::get_cli_string("cli-try-onboard")
                 .as_deref()
-                .unwrap_or("Try `zeroclaw onboard` to initialize your workspace.")
+                .unwrap_or("可尝试运行 `zeroclaw onboard` 来初始化工作区。")
         );
     }
     #[cfg(not(feature = "agent-runtime"))]
     {
-        println!("No command provided.");
-        println!("Try `zeroclaw onboard` to initialize your workspace.");
+        println!("未提供命令。");
+        println!("可尝试运行 `zeroclaw onboard` 来初始化工作区。");
     }
     println!();
 
@@ -172,7 +172,7 @@ fn print_no_command_help(cmd: clap::Command) -> Result<()> {
 #[cfg(windows)]
 fn pause_after_no_command_help() {
     println!();
-    print!("Press Enter to exit...");
+    print!("按回车键退出...");
     let _ = std::io::stdout().flush();
     let mut line = String::new();
     let _ = std::io::stdin().read_line(&mut line);

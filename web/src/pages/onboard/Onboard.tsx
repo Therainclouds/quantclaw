@@ -32,6 +32,7 @@ import {
   type PickerItem,
   type SectionInfo,
 } from '../../lib/api';
+import { t } from '../../lib/i18n';
 import { isLocalModelProviderName } from '../../lib/modelProviders';
 import FieldForm, { type FieldFormHandle } from '../../components/onboard/FieldForm';
 import SectionPicker from '../../components/onboard/SectionPicker';
@@ -72,7 +73,7 @@ export default function Onboard() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [canFinish, setCanFinish] = useState(false);
   const [finishIssues, setFinishIssues] = useState<string[] | null>(null);
-  const [issueTitle, setIssueTitle] = useState('Complete this step before continuing.');
+  const [issueTitle, setIssueTitle] = useState(t('onboard.complete_step_before_continue'));
   const [applyIssue, setApplyIssue] = useState<string | null>(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [selectedAgentAlias, setSelectedAgentAlias] = useState<string | null>(null);
@@ -265,7 +266,7 @@ export default function Onboard() {
   };
 
   const blockAdvance = (issues: string[]) => {
-    setIssueTitle('Complete this step before continuing.');
+    setIssueTitle(t('onboard.complete_step_before_continue'));
     setFinishIssues(issues);
     return false;
   };
@@ -275,12 +276,12 @@ export default function Onboard() {
     setFinishIssues(null);
 
     if (activeSection.key === 'agents' && !selectedAgentAlias) {
-      return blockAdvance(['Create or choose the agent you want to set up.']);
+      return blockAdvance([t('onboard.choose_agent_setup')]);
     }
 
     if (activeSection.key === 'providers.models') {
       if (!picked && !activeSection.ready) {
-        return blockAdvance(['Choose a model provider, then set its required model and credential/auth.']);
+        return blockAdvance([t('onboard.choose_model_provider')]);
       }
       if (picked) {
         const providerIssues = await modelProviderStepIssues(picked);
@@ -289,11 +290,11 @@ export default function Onboard() {
     }
 
     if (activeSection.key === 'storage' && !picked && !activeSection.ready) {
-      return blockAdvance(['Choose a storage backend. SQLite is the safe default for single-node setup.']);
+      return blockAdvance([t('onboard.choose_storage_backend')]);
     }
 
     if (activeSection.key === 'memory' && !picked && !activeSection.ready) {
-      return blockAdvance(['Choose or confirm the persistent memory backend. SQLite is the default; choose none to disable long-term memory.']);
+      return blockAdvance([t('onboard.choose_memory_backend')]);
     }
 
     return true;
@@ -373,11 +374,11 @@ export default function Onboard() {
       const readyToFinish = !status.needs_onboarding && wizardIssues.length === 0;
       setCanFinish(readyToFinish);
       if (!readyToFinish) {
-        setIssueTitle('Finish needs a runnable agent first.');
+        setIssueTitle(t('onboard.finish_needs_runnable_agent'));
         setFinishIssues(
           status.missing.length > 0 || wizardIssues.length > 0
             ? [...status.missing, ...wizardIssues]
-            : ['Complete the required setup steps before finishing onboarding.'],
+            : [t('onboard.complete_required_steps')],
         );
         return;
       }
@@ -388,7 +389,7 @@ export default function Onboard() {
         // eslint-disable-next-line no-console
         console.warn('Daemon reload failed after onboarding; user can retry from /config:', e);
         setApplyIssue(
-          'Setup is saved. This gateway could not apply the changes automatically. Restart the standalone gateway process, then open the dashboard again.',
+          t('onboard.reload_failed_help'),
         );
         return;
       }
@@ -444,7 +445,7 @@ export default function Onboard() {
           className="px-4 py-3 text-xs font-semibold uppercase tracking-wider"
           style={{ color: 'var(--pc-text-secondary)' }}
         >
-          Sections
+          {t('onboard.sections')}
         </div>
         <nav className="flex flex-col">
           {sidebarSections.map((s) => (
@@ -486,7 +487,7 @@ export default function Onboard() {
               className="px-4 py-2.5 text-sm text-left transition-colors"
               style={{ color: 'var(--pc-text-secondary)' }}
             >
-              {showAdvanced ? 'Hide advanced setup' : 'Show advanced setup'}
+              {showAdvanced ? t('onboard.hide_advanced') : t('onboard.show_advanced')}
             </button>
           )}
         </nav>
@@ -505,7 +506,7 @@ export default function Onboard() {
                 className="text-sm flex items-center gap-1.5 flex-wrap"
                 style={{ color: 'var(--pc-text-muted)' }}
               >
-                <span style={{ color: 'var(--pc-text-secondary)' }}>Onboard</span>
+                <span style={{ color: 'var(--pc-text-secondary)' }}>{t('onboard.root')}</span>
                 <ChevronRight className="h-3 w-3" />
                 <span
                   style={{
@@ -533,9 +534,9 @@ export default function Onboard() {
                     disabled={finishing || advancing}
                     onClick={() => void finishOnboarding()}
                     className="btn-secondary inline-flex items-center gap-1.5 text-sm px-3 py-2"
-                    title="Apply the completed setup"
+                    title={t('onboard.apply_setup_title')}
                   >
-                    {finishing ? 'Finishing…' : 'Finish'}
+                    {finishing ? t('onboard.finishing') : t('onboard.finish')}
                   </button>
                 )}
                 {!isLastSection(navigationSections, activeSection.key) && (
@@ -544,9 +545,9 @@ export default function Onboard() {
                     disabled={finishing || advancing}
                     onClick={() => void advanceSection()}
                     className="btn-electric inline-flex items-center gap-1.5 text-sm px-4 py-2"
-                    title="Save and move to the next section"
+                    title={t('onboard.save_next_title')}
                   >
-                    {advancing ? 'Saving…' : 'Next ▶'}
+                    {advancing ? t('onboard.saving') : `${t('onboard.next')} ▶`}
                   </button>
                 )}
               </div>
@@ -585,7 +586,7 @@ export default function Onboard() {
                 <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium mb-1" style={{ color: 'var(--pc-text-primary)' }}>
-                    Setup is saved but not applied yet.
+                    {t('onboard.setup_saved_not_applied')}
                   </p>
                   <p>{applyIssue}</p>
                 </div>
@@ -840,19 +841,19 @@ function formTitleFor(sectionKey: string, picked: { item: PickerItem; fieldsPref
 function entityLabel(sectionKey: string, itemLabel: string): string {
   switch (sectionKey) {
     case 'providers.models':
-      return `${itemLabel} provider`;
+      return `${itemLabel} 提供商`;
     case 'providers.tts':
-      return `${itemLabel} TTS provider`;
+      return `${itemLabel} TTS 提供商`;
     case 'providers.transcription':
-      return `${itemLabel} transcription provider`;
+      return `${itemLabel} 转录提供商`;
     case 'risk-profiles':
-      return 'Risk profile';
+      return '风险配置';
     case 'runtime-profiles':
-      return 'Runtime profile';
+      return '运行时配置';
     case 'storage':
-      return `${capitalize(itemLabel)} storage`;
+      return `${capitalize(itemLabel)} 存储`;
     case 'agents':
-      return 'Agent';
+      return '智能体';
     default:
       return itemLabel;
   }
@@ -890,43 +891,43 @@ function guideFor(sectionKey: string, prefix: string): { title: string; body: st
     const provider = prefix.split('.')[2] ?? '';
     const local = isLocalModelProvider(provider);
     return {
-      title: 'Set up this provider',
+      title: '配置此提供商',
       body: local
-        ? 'For a local provider, choose the model you want this alias to use and confirm the local server or CLI endpoint is available. Most other fields are advanced tuning.'
-        : 'For a hosted provider, choose a model and set the API key or supported auth mode. Most request, formatting, and cost fields can stay at their defaults.',
+        ? '如果是本地提供商，请选择该别名要使用的模型，并确认本地服务或 CLI 端点可用。其余大多数参数都属于高级调优。'
+        : '如果是托管提供商，请选择模型并填写 API Key 或支持的认证方式。大多数请求、格式化和成本字段可以先保留默认值。',
       items: local
-        ? ['Required before chat: model and reachable local endpoint or CLI.', 'Optional: timeout, temperature, request-format, and pricing fields.']
-        : ['Required before chat: model and credential/auth.', 'Optional: timeout, temperature, request-format, and pricing fields.'],
+        ? ['开始聊天前必须完成：模型，以及可访问的本地端点或 CLI。', '可选项：超时、温度、请求格式与计价字段。']
+        : ['开始聊天前必须完成：模型，以及凭证或认证配置。', '可选项：超时、温度、请求格式与计价字段。'],
     };
   }
   if (sectionKey === 'risk-profiles') {
     return {
-      title: 'Reusable safety profile',
-      body: 'The default risk profile is usable as-is for first-run setup. Edit it if you want to change tool, command, path, or approval rules before creating an agent.',
+      title: '可复用的安全配置',
+      body: '默认风险配置可以直接用于首次部署。如果你希望在创建智能体前调整工具、命令、路径或审批规则，可以在这里编辑。',
     };
   }
   if (sectionKey === 'runtime-profiles') {
     return {
-      title: 'Reusable runtime profile',
-      body: 'The default runtime profile is usable as-is for first-run setup. Edit it if you want to change agentic mode, iteration limits, timeouts, cost limits, or context behavior.',
+      title: '可复用的运行时配置',
+      body: '默认运行时配置可以直接用于首次部署。如果你希望调整智能体模式、迭代限制、超时、成本限制或上下文行为，可以在这里编辑。',
     };
   }
   if (sectionKey === 'storage') {
     return {
-      title: 'Storage backend instance',
-      body: 'Most single-node setups can use one SQLite instance called default. Create extra aliases only when you need multiple storage backends for different agents or environments.',
+      title: '存储后端实例',
+      body: '大多数单节点部署只需要一个名为 default 的 SQLite 实例。只有当不同智能体或环境确实需要多个存储后端时，才需要额外创建别名。',
     };
   }
   if (sectionKey === 'memory') {
     return {
-      title: 'Persistent memory backend',
-      body: 'SQLite is the default for local first-run setup. Pick none only if you want to disable long-term memory entirely.',
+      title: '持久化记忆后端',
+      body: '本地首次部署默认使用 SQLite。只有当你想完全关闭长期记忆时，才应该选择 none。',
     };
   }
   if (sectionKey === 'agents') {
     return {
-      title: 'Runnable agent checklist',
-      body: 'This is the assistant you will chat with. Before Finish appears, the agent must be enabled and point at the provider and profiles you set up earlier.',
+      title: '可运行智能体检查清单',
+      body: '这就是你后续要聊天的智能体。只有在它已启用，并正确指向前面配置好的提供商和各类配置文件后，完成按钮才会出现。',
     };
   }
   return null;
@@ -960,12 +961,12 @@ function FirstRunCompleteActions({
     >
       <div>
         <p className="font-semibold mb-1" style={{ color: 'var(--pc-text-primary)' }}>
-          {canFinish ? 'Basic setup is ready to apply' : 'Finish the required assignments'}
+          {canFinish ? '基础设置已就绪，可直接应用' : '请先完成必需的绑定与分配'}
         </p>
         <p>
           {canFinish
-            ? 'Optional advanced setup includes skills, skill bundles, MCP, channels, peer groups, cron, tunnel, TTS, and transcription providers.'
-            : 'Choose the required model provider, risk profile, and runtime profile above. Advanced setup can wait until the agent can reply.'}
+            ? '后续可选的高级设置包括技能、技能包、MCP、频道、对等组、定时任务、隧道、TTS 和转录提供商。'
+            : '请先完成上面的模型提供商、风险配置和运行时配置。高级设置可以等智能体能够正常回复后再继续。'}
         </p>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -976,11 +977,11 @@ function FirstRunCompleteActions({
             disabled={finishing}
             onClick={onFinish}
           >
-            {finishing ? 'Finishing…' : 'Finish'}
+            {finishing ? t('onboard.finishing') : t('onboard.finish')}
           </button>
         ) : (
           <p className="text-sm" style={{ color: 'var(--color-status-error)' }}>
-            Finish appears once the required agent assignments are complete.
+            完成按钮会在必需的智能体绑定全部完成后出现。
           </p>
         )}
         <button
@@ -988,7 +989,7 @@ function FirstRunCompleteActions({
           className="btn-secondary text-sm px-4 py-2"
           onClick={onAdvanced}
         >
-          Continue advanced setup
+          继续高级设置
         </button>
       </div>
     </div>
@@ -1012,11 +1013,10 @@ const AgentFirstRunForm = forwardRef<FieldFormHandle, {
         }}
       >
         <p className="font-semibold mb-1" style={{ color: 'var(--pc-text-primary)' }}>
-          Agent assignments
+          智能体绑定
         </p>
         <p>
-          Review the model provider, risk profile, and runtime profile this
-          agent uses. First-run setup preselects the defaults when they exist.
+          请确认该智能体使用的模型提供商、风险配置和运行时配置。首次引导会在存在默认项时自动预选。
         </p>
       </div>
       <FieldForm
@@ -1033,13 +1033,13 @@ const AgentFirstRunForm = forwardRef<FieldFormHandle, {
           className="btn-secondary text-sm px-4 py-2"
           onClick={() => setShowAdvanced((show) => !show)}
         >
-          {showAdvanced ? 'Hide advanced agent settings' : 'Show advanced agent settings'}
+          {showAdvanced ? '隐藏智能体高级设置' : '显示智能体高级设置'}
         </button>
       </div>
       {showAdvanced && (
         <FieldForm
           prefix={prefix}
-          title="Advanced agent settings"
+          title="智能体高级设置"
           includePath={(path) => !isAgentFirstRunPath(prefix, path)}
           onSaved={onSaved}
         />
@@ -1091,12 +1091,12 @@ function DefaultProfileSummary({
         }}
       >
         <p className="font-semibold mb-1" style={{ color: 'var(--pc-text-primary)' }}>
-          {isRisk ? 'Safety profile created' : 'Runtime profile created'}
+          {isRisk ? '风险配置已创建' : '运行时配置已创建'}
         </p>
         <p>
           {isRisk
-            ? `Agent setup can use risk profile ${alias} as-is. Edit it if you want a different safety posture.`
-            : `Agent setup can use runtime profile ${alias} as-is. Edit it if you want to change agentic mode, iteration limits, timeouts, cost limits, or context behavior.`}
+            ? `智能体设置可以直接使用风险配置 ${alias}。如果你希望采用不同的安全策略，可以继续编辑。`
+            : `智能体设置可以直接使用运行时配置 ${alias}。如果你想调整智能体模式、迭代限制、超时、成本限制或上下文行为，可以继续编辑。`}
         </p>
       </div>
 
@@ -1118,10 +1118,10 @@ function DefaultProfileSummary({
               }}
             >
               <span className="flex items-center justify-between gap-2 text-sm font-semibold" style={{ color: 'var(--pc-text-primary)' }}>
-                <span>{savingPreset === preset.key ? 'Applying…' : preset.label}</span>
+                <span>{savingPreset === preset.key ? '应用中...' : preset.label}</span>
                 {appliedPreset === preset.key && (
                   <span className="text-xs" style={{ color: 'var(--pc-accent)' }}>
-                    selected
+                    已选择
                   </span>
                 )}
               </span>
@@ -1138,16 +1138,16 @@ function DefaultProfileSummary({
 
       {isRisk && appliedPreset && (
         <p className="text-sm" style={{ color: 'var(--color-status-success)' }}>
-          {RISK_PRESETS.find((preset) => preset.key === appliedPreset)?.label ?? 'Preset'} applied to {alias}.
+          已将 {RISK_PRESETS.find((preset) => preset.key === appliedPreset)?.label ?? '预设'} 应用到 {alias}。
         </p>
       )}
 
       <div className="flex items-center gap-2">
         <button type="button" className="btn-electric text-sm px-4 py-2" onClick={onContinue}>
-          Continue
+          继续
         </button>
         <button type="button" className="btn-secondary text-sm px-4 py-2" onClick={onEdit}>
-          Edit profile
+          编辑配置
         </button>
       </div>
     </div>
@@ -1175,20 +1175,20 @@ function MemoryBackendSummary({
         }}
       >
         <p className="font-semibold mb-1" style={{ color: 'var(--pc-text-primary)' }}>
-          Memory backend selected
+          已选择记忆后端
         </p>
         <p>
           {disabled
-            ? 'Persistent memory is disabled for this setup. You can enable a memory backend later from Config.'
-            : `${item.label} is selected for persistent memory. Most first-run setups can use this as-is.`}
+            ? '当前配置已关闭持久化记忆。你之后仍可在配置页中重新启用记忆后端。'
+            : `当前已将 ${item.label} 设为持久化记忆后端。大多数首次部署都可以直接使用这个默认设置。`}
         </p>
       </div>
       <div className="flex items-center gap-2">
         <button type="button" className="btn-electric text-sm px-4 py-2" onClick={onContinue}>
-          Continue
+          继续
         </button>
         <button type="button" className="btn-secondary text-sm px-4 py-2" onClick={onEdit}>
-          Edit memory settings
+          编辑记忆设置
         </button>
       </div>
     </div>
@@ -1209,8 +1209,8 @@ interface RiskPreset {
 const RISK_PRESETS: RiskPreset[] = [
   {
     key: 'read_only',
-    label: 'Read-only',
-    description: 'Inspection-oriented: shell commands are limited and medium-risk actions still need approval.',
+    label: '只读',
+    description: '偏检查模式：Shell 命令受限，中风险操作仍需审批。',
     level: 'readonly',
     allowedCommands: ['git', 'ls', 'pwd', 'cat', 'head', 'tail', 'rg', 'sed'],
     requireApprovalForMediumRisk: true,
@@ -1218,8 +1218,8 @@ const RISK_PRESETS: RiskPreset[] = [
   },
   {
     key: 'balanced',
-    label: 'Balanced default',
-    description: 'Good first-run posture: common development tools, approval for medium risk, high-risk commands blocked.',
+    label: '平衡默认',
+    description: '适合作为首次部署默认方案：常用开发工具可用，中风险需审批，高风险命令被拦截。',
     level: 'supervised',
     allowedCommands: [
       'git',
@@ -1250,8 +1250,8 @@ const RISK_PRESETS: RiskPreset[] = [
   },
   {
     key: 'local_dev',
-    label: 'Local dev',
-    description: 'More permissive for a trusted local workspace, while still blocking high-risk command patterns.',
+    label: '本地开发',
+    description: '适合可信的本地工作区，权限更宽松，但仍会拦截高风险命令模式。',
     level: 'full',
     allowedCommands: [
       'git',
@@ -1287,8 +1287,8 @@ const RISK_PRESETS: RiskPreset[] = [
   {
     key: 'yolo',
     label: 'YOLO',
-    description: 'Maximum local autonomy for a trusted disposable workspace.',
-    warning: 'Not recommended unless you understand the risk.',
+    description: '适合可信且可丢弃的本地工作区，提供最高自治能力。',
+    warning: '除非你完全理解风险，否则不建议使用。',
     level: 'full',
     allowedCommands: [
       'git',

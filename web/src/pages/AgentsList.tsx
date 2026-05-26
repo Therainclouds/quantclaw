@@ -4,6 +4,7 @@ import { Bot, Plus, AlertCircle } from 'lucide-react';
 import AgentCard from '@/components/AgentCard';
 import { loadAgentSummaries, toggleAgentEnabled, type AgentSummary } from '@/lib/agents';
 import { getOnboardStatus } from '@/lib/api';
+import { t } from '@/lib/i18n';
 
 interface AgentSummariesState {
   loading: boolean;
@@ -26,7 +27,7 @@ export default function AgentsList() {
       .catch((err: unknown) =>
         setState({
           loading: false,
-          error: err instanceof Error ? err.message : 'Failed to load agents',
+          error: err instanceof Error ? err.message : t('agents.loading_error'),
           agents: [],
         }),
       );
@@ -49,7 +50,7 @@ export default function AgentsList() {
     } catch (err) {
       setState((s) => ({
         ...s,
-        error: err instanceof Error ? err.message : `Failed to toggle ${agent.alias}`,
+        error: err instanceof Error ? err.message : t('agents.toggle_error').replace('{alias}', agent.alias),
       }));
     } finally {
       setToggling((prev) => {
@@ -68,10 +69,10 @@ export default function AgentsList() {
             className="text-2xl font-semibold"
             style={{ color: 'var(--pc-text-primary)' }}
           >
-            Agents
+            {t('agents.title')}
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--pc-text-muted)' }}>
-            Configured agents on this QuantClaw instance.
+            {t('agents.subtitle')}
           </p>
         </div>
         <Link
@@ -79,7 +80,7 @@ export default function AgentsList() {
           className="btn-electric flex items-center gap-2 px-4 py-2 rounded-xl text-sm"
         >
           <Plus className="h-4 w-4" />
-          New Agent
+          {t('agents.new')}
         </Link>
       </header>
 
@@ -105,7 +106,7 @@ export default function AgentsList() {
             color: 'var(--pc-text-muted)',
           }}
         >
-          Loading agents...
+          {t('agents.loading')}
         </div>
       ) : state.agents.length === 0 ? (
         <EmptyState />
@@ -126,20 +127,20 @@ export default function AgentsList() {
 }
 
 function EmptyState() {
-  const [buttonLabel, setButtonLabel] = useState('Start onboarding');
+  const [buttonLabel, setButtonLabel] = useState(t('agents.start_onboarding'));
 
   useEffect(() => {
     getOnboardStatus()
       .then((status) => {
         if (status.reason === 'has_dispatchable_agent') {
-          setButtonLabel('Run onboarding again');
+          setButtonLabel(t('agents.rerun_onboarding'));
         } else if (status.has_partial_state || status.reason === 'incomplete_agent') {
-          setButtonLabel('Continue onboarding');
+          setButtonLabel(t('agents.continue_onboarding'));
         } else {
-          setButtonLabel('Start onboarding');
+          setButtonLabel(t('agents.start_onboarding'));
         }
       })
-      .catch(() => setButtonLabel('Start onboarding'));
+      .catch(() => setButtonLabel(t('agents.start_onboarding')));
   }, []);
 
   return (
@@ -157,10 +158,10 @@ function EmptyState() {
         className="text-base font-medium mb-1"
         style={{ color: 'var(--pc-text-primary)' }}
       >
-        No agents configured yet
+        {t('agents.empty_title')}
       </p>
       <p className="text-sm mb-4" style={{ color: 'var(--pc-text-muted)' }}>
-        Run the onboarding wizard to add your first agent.
+        {t('agents.empty_hint')}
       </p>
       <Link
         to="/onboard"

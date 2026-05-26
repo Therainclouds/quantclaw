@@ -105,7 +105,7 @@ export default function Sidebar({ open, onClose, collapsed }: SidebarProps) {
           onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
           role="button"
           tabIndex={-1}
-          aria-label="Close menu"
+          aria-label={t('common.close_menu')}
         />
       )}
 
@@ -113,7 +113,7 @@ export default function Sidebar({ open, onClose, collapsed }: SidebarProps) {
       <aside
         className="hidden md:flex fixed top-0 left-0 h-screen flex-col border-r z-50 transition-all duration-300 ease-in-out"
         style={{ background: 'var(--pc-bg-base)', borderColor: 'var(--pc-border)', width: collapsed ? '56px' : '240px' }}
-        aria-label={collapsed ? 'Collapsed sidebar' : 'Main sidebar'}
+        aria-label={collapsed ? t('common.collapsed_sidebar') : t('common.main_sidebar')}
       >
         <SidebarLogo collapsed={collapsed} />
         <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-1">
@@ -137,7 +137,7 @@ export default function Sidebar({ open, onClose, collapsed }: SidebarProps) {
           open ? 'translate-x-0' : '-translate-x-full',
         ].join(' ')}
         style={{ background: 'var(--pc-bg-base)', borderColor: 'var(--pc-border)' }}
-        aria-label="Mobile menu"
+        aria-label={t('common.mobile_menu')}
       >
         <SidebarLogo collapsed={false} />
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
@@ -173,7 +173,7 @@ function SidebarLogo({ collapsed }: { collapsed: boolean }) {
       <div className="relative shrink-0">
         <div className="absolute -inset-1.5 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(var(--pc-accent-rgb), 0.15), rgba(var(--pc-accent-rgb), 0.05))' }} />
         <img
-          src={`${basePath}/_app/zeroclaw-trans.png`}
+          src={`${basePath}/_app/quantclaw-trans.png`}
           alt="QuantClaw"
           className="relative h-9 w-9 rounded-xl object-cover"
           onError={(e) => {
@@ -210,7 +210,7 @@ function SidebarFooter({ collapsed, layout }: { collapsed: boolean; layout: 'des
         className="px-5 py-4 border-t text-[10px] uppercase tracking-wider"
         style={{ borderColor: 'var(--pc-border)', color: 'var(--pc-text-faint)' }}
       >
-        QuantClaw Gateway
+        QuantClaw 网关
         {version && (
           <div className="mt-0.5 normal-case tracking-normal" style={{ fontSize: '9px' }}>
             v{version}
@@ -233,7 +233,7 @@ function SidebarFooter({ collapsed, layout }: { collapsed: boolean; layout: 'des
         textAlign: collapsed ? 'center' : 'left',
       }}
     >
-      {!collapsed && 'QuantClaw Gateway'}
+      {!collapsed && 'QuantClaw 网关'}
       {!collapsed && version && (
         <div style={{ marginTop: '2px', fontSize: '9px', textTransform: 'none', letterSpacing: 'normal' }}>
           v{version}

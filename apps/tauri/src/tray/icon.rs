@@ -26,12 +26,12 @@ pub fn icon_for_state(connected: bool, status: AgentStatus) -> Image<'static> {
 /// Tooltip text for the current state.
 pub fn tooltip_for_state(connected: bool, status: AgentStatus) -> &'static str {
     if !connected {
-        return "QuantClaw — Disconnected";
+        return "QuantClaw - 未连接";
     }
     match status {
-        AgentStatus::Idle => "QuantClaw — Idle",
-        AgentStatus::Working => "QuantClaw — Working",
-        AgentStatus::Error => "QuantClaw — Error",
+        AgentStatus::Idle => "QuantClaw - 空闲",
+        AgentStatus::Working => "QuantClaw - 运行中",
+        AgentStatus::Error => "QuantClaw - 异常",
     }
 }
 
@@ -58,16 +58,16 @@ mod tests {
     fn tooltip_disconnected() {
         assert_eq!(
             tooltip_for_state(false, AgentStatus::Idle),
-            "QuantClaw — Disconnected"
+            "QuantClaw - 未连接"
         );
         // Agent status is irrelevant when disconnected.
         assert_eq!(
             tooltip_for_state(false, AgentStatus::Working),
-            "QuantClaw — Disconnected"
+            "QuantClaw - 未连接"
         );
         assert_eq!(
             tooltip_for_state(false, AgentStatus::Error),
-            "QuantClaw — Disconnected"
+            "QuantClaw - 未连接"
         );
     }
 
@@ -75,15 +75,15 @@ mod tests {
     fn tooltip_connected_variants() {
         assert_eq!(
             tooltip_for_state(true, AgentStatus::Idle),
-            "QuantClaw — Idle"
+            "QuantClaw - 空闲"
         );
         assert_eq!(
             tooltip_for_state(true, AgentStatus::Working),
-            "QuantClaw — Working"
+            "QuantClaw - 运行中"
         );
         assert_eq!(
             tooltip_for_state(true, AgentStatus::Error),
-            "QuantClaw — Error"
+            "QuantClaw - 异常"
         );
     }
 

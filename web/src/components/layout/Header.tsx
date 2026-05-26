@@ -67,7 +67,7 @@ export default function Header({ onMenuToggle, onCollapseToggle, collapsed }: He
             style={{ color: 'var(--pc-text-muted)' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--pc-text-primary)'; e.currentTarget.style.background = 'var(--pc-hover)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--pc-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
-            aria-label="Open menu"
+            aria-label={t('common.open_menu')}
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -80,7 +80,7 @@ export default function Header({ onMenuToggle, onCollapseToggle, collapsed }: He
             style={{ color: 'var(--pc-text-muted)' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--pc-text-primary)'; e.currentTarget.style.background = 'var(--pc-hover)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--pc-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={collapsed ? t('common.expand_sidebar') : t('common.collapse_sidebar')}
           >
             {collapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
           </button>

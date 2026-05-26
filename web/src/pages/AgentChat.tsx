@@ -335,7 +335,7 @@ function AgentChatInner({ agentAlias }: { agentAlias: string }) {
             <div className="h-16 w-16 rounded-3xl flex items-center justify-center mb-4 animate-float" style={{ background: 'var(--pc-accent-glow)' }}>
               <Bot className="h-8 w-8" style={{ color: 'var(--pc-accent)' }} />
             </div>
-            <p className="text-lg font-semibold mb-1" style={{ color: 'var(--pc-text-primary)' }}>QuantClaw Agent</p>
+            <p className="text-lg font-semibold mb-1" style={{ color: 'var(--pc-text-primary)' }}>{t('agent.welcome_title')}</p>
             <p className="text-sm" style={{ color: 'var(--pc-text-muted)' }}>{t('agent.start_conversation')}</p>
           </div>
         )}
@@ -363,7 +363,7 @@ function AgentChatInner({ agentAlias }: { agentAlias: string }) {
               <div className="rounded-2xl px-4 py-3 border max-w-[75%]" style={{ background: 'var(--pc-bg-elevated)', borderColor: 'var(--pc-border)', color: 'var(--pc-text-primary)' }}>
                 {streamingThinking && (
                   <details className="mb-2" open={!streamingContent}>
-                    <summary className="text-xs cursor-pointer select-none" style={{ color: 'var(--pc-text-muted)' }}>Thinking{!streamingContent && '...'}</summary>
+                    <summary className="text-xs cursor-pointer select-none" style={{ color: 'var(--pc-text-muted)' }}>{t('agent.thinking_summary')}{!streamingContent && '...'}</summary>
                     <pre className="text-xs mt-1 whitespace-pre-wrap break-words leading-relaxed overflow-auto max-h-60 p-2 rounded-lg" style={{ color: 'var(--pc-text-muted)', background: 'var(--pc-bg-surface)' }}>{streamingThinking}</pre>
                   </details>
                 )}
@@ -508,7 +508,7 @@ const MessageItem = memo(function MessageItem({
         >
           {msg.thinking && (
             <details className="mb-2">
-              <summary className="text-xs cursor-pointer select-none" style={{ color: 'var(--pc-text-muted)' }}>Thinking</summary>
+              <summary className="text-xs cursor-pointer select-none" style={{ color: 'var(--pc-text-muted)' }}>{t('agent.thinking_summary')}</summary>
               <pre className="text-xs mt-1 whitespace-pre-wrap break-words leading-relaxed overflow-auto max-h-60 p-2 rounded-lg" style={{ color: 'var(--pc-text-muted)', background: 'var(--pc-bg-surface)' }}>{msg.thinking}</pre>
             </details>
           )}

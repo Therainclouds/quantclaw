@@ -34,6 +34,7 @@ import SkillsBundleEditor from '../components/onboard/SkillsBundleEditor';
 import ReloadDaemonButton from '../components/onboard/ReloadDaemonButton';
 import SectionPicker from '../components/onboard/SectionPicker';
 import SectionTabs, { type SectionTabSpec } from '../components/onboard/SectionTabs';
+import { t } from '../lib/i18n';
 import CostRatesEditor, {
   type CostRatesCategory,
 } from '../components/onboard/CostRatesEditor';
@@ -577,10 +578,10 @@ export default function Config() {
                 <Link
                   to="/onboard"
                   className="btn-secondary inline-flex items-center gap-1.5 text-xs px-3 py-1.5"
-                  title="Walk the first-run onboarding wizard again"
+                  title={t('config.run_onboarding_again_title')}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
-                  Run onboarding again
+                  {t('config.run_onboarding_again')}
                 </Link>
                 <ReloadDaemonButton
                   onReloaded={() => {
@@ -616,17 +617,10 @@ function ConfigAliasHelpBox() {
       }}
     >
       <p className="mb-1">
-        <strong>Alias.</strong> A short stable name you’ll use everywhere else
-        in config to point at this entry (agents, routes, and per-channel
-        bindings reference it as <code>{'<type>'}.{'<alias>'}</code>). Aliases
-        let you have several entries of the same type — a <code>work</code>{' '}
-        credential and a <code>personal</code> one, for example.
+        <strong>别名。</strong> {t('config.alias_help')}
       </p>
       <p className="mb-0">
-        Rules: lowercase letters, digits, single underscores; 1–63 chars; no
-        leading/trailing/double underscores, no dots, hyphens, or spaces.{' '}
-        <strong>Aliases can’t be renamed in v0.8.0</strong> — pick something
-        you’ll keep, or delete and recreate.
+        {t('config.alias_rules')}
       </p>
     </div>
   );
@@ -644,7 +638,7 @@ function suggestConfigAlias(aliases: string[]): string {
 
 function validateConfigAlias(alias: string): string | null {
   if (/^(?!_)(?!.*__)(?!.*_$)[a-z0-9_]{1,63}$/.test(alias)) return null;
-  return 'Alias must use lowercase letters, digits, or single underscores only; no hyphens, dots, spaces, leading/trailing underscores, or double underscores.';
+  return t('config.alias_invalid');
 }
 
 function AliasListView({
@@ -716,7 +710,7 @@ function AliasListView({
         className="btn-secondary inline-flex items-center gap-2 text-sm px-3 py-1.5 self-start"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back
+        {t('config.back')}
       </button>
 
       {sectionHelp && (
@@ -788,7 +782,7 @@ function AliasListView({
                 onClick={() => void submit()}
                 className="btn-electric text-sm px-3 py-1.5 flex-shrink-0"
               >
-                Add
+                {t('config.add')}
               </button>
             </div>
             {aliasError && (
@@ -1351,7 +1345,7 @@ function AliasRow({
         type="button"
         onClick={onTrashClick}
         disabled={deleting}
-        title={armed ? 'Click again to confirm delete' : 'Delete this alias'}
+                  title={armed ? t('config.click_confirm_delete') : t('config.delete_alias')}
         className="btn-icon flex-shrink-0"
         style={
           armed
@@ -1359,7 +1353,7 @@ function AliasRow({
             : undefined
         }
       >
-        {armed ? <span className="text-xs px-1">Confirm</span> : <Trash2 className="h-4 w-4" />}
+        {armed ? <span className="text-xs px-1">{t('common.confirm')}</span> : <Trash2 className="h-4 w-4" />}
       </button>
     </div>
   );

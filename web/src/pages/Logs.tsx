@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Activity, ChevronDown, ChevronUp, Pause, Play, Plus, RefreshCw, X } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import type { LogEvent, LogsQueryParams, LogsResponse } from '@/lib/api';
+import { t } from '@/lib/i18n';
 
 const DEFAULT_SEVERITY_MIN = 9;
 const PAGE_LIMIT = 200;
@@ -14,7 +15,7 @@ const SEVERITY_OPTIONS: { label: string; value: number | '' }[] = [
   { label: 'INFO+', value: 9 },
   { label: 'WARN+', value: 13 },
   { label: 'ERROR+', value: 17 },
-  { label: 'Any', value: '' },
+  { label: t('logs.any'), value: '' },
 ];
 
 const CATEGORY_OPTIONS = [
@@ -302,13 +303,13 @@ export default function Logs() {
             className="text-sm font-semibold uppercase tracking-wider"
             style={{ color: 'var(--pc-text-primary)' }}
           >
-            Logs
+            {t('logs.title')}
           </h2>
           <span
             className="text-[10px] font-mono ml-2"
             style={{ color: 'var(--pc-text-faint)' }}
           >
-            {events.length} events {atEnd ? '(end)' : ''}
+            {events.length} {t('logs.events')} {atEnd ? '(end)' : ''}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -341,11 +342,11 @@ export default function Logs() {
           >
             {paused ? (
               <>
-                <Play className="h-3.5 w-3.5" /> Resume
+                <Play className="h-3.5 w-3.5" /> {t('logs.resume')}
               </>
             ) : (
               <>
-                <Pause className="h-3.5 w-3.5" /> Pause
+                <Pause className="h-3.5 w-3.5" /> {t('logs.pause')}
               </>
             )}
           </button>
@@ -356,7 +357,7 @@ export default function Logs() {
             className="btn-electric flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            {t('logs.refresh')}
           </button>
         </div>
       </div>
@@ -369,7 +370,7 @@ export default function Logs() {
           type="search"
           value={filter.q}
           onChange={(event) => setFilter((prev) => ({ ...prev, q: event.target.value }))}
-          placeholder="Search message + attributes"
+          placeholder={t('logs.search_attrs')}
           className="px-2 py-1 text-xs rounded border min-w-[220px] flex-1"
           style={{
             background: 'var(--pc-bg-surface)',
@@ -411,7 +412,7 @@ export default function Logs() {
         >
           {CATEGORY_OPTIONS.map((option) => (
             <option key={option} value={option}>
-              {option || 'Any category'}
+              {option || t('logs.any_category')}
             </option>
           ))}
         </select>
@@ -427,7 +428,7 @@ export default function Logs() {
         >
           {OUTCOME_OPTIONS.map((option) => (
             <option key={option} value={option}>
-              {option || 'Any outcome'}
+              {option || t('logs.any_outcome')}
             </option>
           ))}
         </select>
@@ -455,7 +456,7 @@ export default function Logs() {
             }
             style={{ accentColor: 'var(--pc-accent)' }}
           />
-          Hide internal
+          {t('logs.hide_internal')}
         </label>
         <label
           className="flex items-center gap-1.5 text-[11px] cursor-pointer"
@@ -469,7 +470,7 @@ export default function Logs() {
             }
             style={{ accentColor: 'var(--pc-accent)' }}
           />
-          Since daemon start
+          {t('logs.since_daemon_start')}
         </label>
         <button
           type="button"
@@ -517,7 +518,7 @@ export default function Logs() {
                 type="button"
                 onClick={() => setFieldEq(key, '')}
                 style={{ color: 'var(--pc-text-faint)' }}
-                aria-label={`Remove ${key} filter`}
+                aria-label={t('logs.remove_filter').replace('{key}', key)}
               >
                 <X className="h-3 w-3" />
               </button>
@@ -541,7 +542,7 @@ export default function Logs() {
               }}
             >
               <option value="" disabled>
-                Pick a key…
+                {t('logs.pick_key')}
               </option>
               {inactiveAttributionKeys.map((key) => (
                 <option key={key} value={key}>
@@ -561,7 +562,7 @@ export default function Logs() {
                 color: 'var(--pc-text-muted)',
               }}
             >
-              <Plus className="h-3 w-3" /> Add filter
+              <Plus className="h-3 w-3" /> {t('logs.add_filter')}
             </button>
           )}
           {activeFieldKeys.length > 0 && (
@@ -571,7 +572,7 @@ export default function Logs() {
               className="text-[10px] ml-1"
               style={{ color: 'var(--pc-accent)' }}
             >
-              clear
+              {t('logs.clear_filters')}
             </button>
           )}
         </div>
@@ -600,7 +601,7 @@ export default function Logs() {
               className="h-10 w-10 mb-3"
               style={{ color: 'var(--pc-text-faint)' }}
             />
-            <p className="text-sm">No events match the current filters.</p>
+            <p className="text-sm">{t('logs.no_events_filtered')}</p>
           </div>
         ) : (
           events.map((event) => <LogRow key={event.id} event={event} />)
@@ -613,7 +614,7 @@ export default function Logs() {
               disabled={loadingOlder || !cursorOlder}
               className="btn-electric px-3 py-1.5 text-xs font-semibold"
             >
-              {loadingOlder ? 'Loading…' : 'Load older'}
+              {loadingOlder ? t('common.loading') : t('logs.load_older')}
             </button>
           </div>
         )}
@@ -691,7 +692,7 @@ function LogRow({ event }: { event: LogEvent }) {
                 className="cursor-pointer text-[10px]"
                 style={{ color: 'var(--pc-text-faint)' }}
               >
-                attributes ({Object.keys(event.attributes).length})
+                {t('logs.attributes')} ({Object.keys(event.attributes).length})
               </summary>
               <pre
                 className="mt-1 p-2 rounded text-[10px] overflow-x-auto"

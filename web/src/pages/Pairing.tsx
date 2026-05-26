@@ -142,15 +142,15 @@ export default function Pairing() {
                 <th>{t('pairing.type')}</th>
                 <th>{t('pairing.paired')}</th>
                 <th>{t('pairing.last_seen')}</th>
-                <th>IP</th>
+                <th>{t('common.ip')}</th>
                 <th className="text-right">{t('pairing.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {devices.map((device) => (
                 <tr key={device.id}>
-                  <td style={{ color: 'var(--pc-text-primary)' }}>{device.name || 'Unnamed'}</td>
-                  <td style={{ color: 'var(--pc-text-secondary)' }}>{device.device_type || 'Unknown'}</td>
+                  <td style={{ color: 'var(--pc-text-primary)' }}>{device.name || t('common.unnamed')}</td>
+                  <td style={{ color: 'var(--pc-text-secondary)' }}>{device.device_type || t('common.unknown')}</td>
                   <td className="text-xs" style={{ color: 'var(--pc-text-muted)' }}>
                     {new Date(device.paired_at).toLocaleDateString()}
                   </td>

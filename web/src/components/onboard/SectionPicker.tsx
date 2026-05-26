@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { fuzzyFilter } from '../../lib/fuzzy';
+import { t } from '../../lib/i18n';
 import {
   ApiError,
   getSectionPicker,
@@ -63,7 +64,7 @@ export default function SectionPicker({
         if (e instanceof ApiError) {
           setError(`[${e.envelope.code}] ${e.envelope.message}`);
         } else {
-          setError(`Couldn't load picker for ${sectionKey}: ${e instanceof Error ? e.message : String(e)}`);
+          setError(`${t('picker.load_error')} ${sectionKey}: ${e instanceof Error ? e.message : String(e)}`);
         }
       })
       .finally(() => !cancelled && setLoading(false));
@@ -144,7 +145,7 @@ export default function SectionPicker({
             setHighlightIdx(0);
           }}
           onKeyDown={handleKey}
-          placeholder="Filter — fuzzy match. Enter to pick, Esc to skip."
+          placeholder={t('picker.filter_hint')}
           className="input-electric w-full px-3 py-2.5 text-sm"
         />
       </div>
@@ -158,7 +159,7 @@ export default function SectionPicker({
             className="px-4 py-6 text-sm text-center"
             style={{ color: 'var(--pc-text-muted)' }}
           >
-            No matches. Try a different filter.
+            {t('picker.no_matches')}
           </div>
         ) : (
           filtered.map((item, idx) => (
@@ -232,7 +233,7 @@ export default function SectionPicker({
             className="btn-secondary flex items-center gap-2 text-sm px-3 py-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            {t('common.back')}
           </button>
         </div>
       )}

@@ -144,10 +144,10 @@ function ProcessRamCard({ process }: { process?: ProcessStats }) {
       </p>
       <p className="text-sm truncate" style={{ color: 'var(--pc-text-muted)' }}>
         {pct !== null
-          ? `${pct.toFixed(pct < 1 ? 2 : 1)}% of ${formatBytes(process!.system_ram_total_bytes)}`
+          ? `${pct.toFixed(pct < 1 ? 2 : 1)}% / ${formatBytes(process!.system_ram_total_bytes)}`
           : supported
-            ? 'resident (QuantClaw)'
-            : 'not supported on this platform'}
+            ? t('dashboard.memory_resident')
+            : t('dashboard.platform_not_supported')}
       </p>
     </div>
   );
@@ -182,9 +182,9 @@ function ProcessCpuCard({ process }: { process?: ProcessStats }) {
       <p className="text-sm truncate" style={{ color: 'var(--pc-text-muted)' }}>
         {supported
           ? ncpu > 0
-            ? `${ncpu} cores · ${(pct / ncpu).toFixed(1)}% normalized`
-            : 'across all cores'
-          : 'not supported on this platform'}
+            ? `${ncpu} cores · ${t('dashboard.cpu_normalized').replace('{value}', `${(pct / ncpu).toFixed(1)}%`)}`
+            : t('dashboard.all_cores')
+          : t('dashboard.platform_not_supported')}
       </p>
     </div>
   );
@@ -610,13 +610,13 @@ type SessionSort =
   | 'messages-desc'
   | 'messages-asc';
 
-const SESSION_SORT_OPTIONS: { value: SessionSort; label: string }[] = [
-  { value: 'activity-desc', label: 'Recent activity' },
-  { value: 'activity-asc', label: 'Oldest activity' },
-  { value: 'created-desc', label: 'Newest first' },
-  { value: 'created-asc', label: 'Oldest first' },
-  { value: 'messages-desc', label: 'Busiest' },
-  { value: 'messages-asc', label: 'Quietest' },
+const SESSION_SORT_OPTIONS: { value: SessionSort; labelKey: string }[] = [
+  { value: 'activity-desc', labelKey: 'dashboard.recent_activity' },
+  { value: 'activity-asc', labelKey: 'dashboard.oldest_activity' },
+  { value: 'created-desc', labelKey: 'dashboard.newest_first' },
+  { value: 'created-asc', labelKey: 'dashboard.oldest_first' },
+  { value: 'messages-desc', labelKey: 'dashboard.busiest' },
+  { value: 'messages-asc', labelKey: 'dashboard.quietest' },
 ];
 
 function isSessionSort(v: string): v is SessionSort {
@@ -755,7 +755,8 @@ function SessionsTab() {
 
   const handleDelete = async (session: Session) => {
     if (deleting) return;
-    if (!window.confirm(`Delete session ${session.session_id}? This cannot be undone.`)) {
+    const confirmText = t('dashboard.delete_session_confirm').replace('{id}', session.session_id);
+    if (!window.confirm(confirmText)) {
       return;
     }
     setDeleting(session.session_key);
@@ -829,10 +830,10 @@ function SessionsTab() {
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search…"
+              placeholder={t('dashboard.search_sessions')}
               className="input-electric pl-7 pr-2 py-1 text-xs w-40"
-              title="Substring match on id, key, name, agent, channel"
-              aria-label="Search sessions"
+              title={t('dashboard.search_sessions_hint')}
+              aria-label={t('dashboard.search_sessions')}
             />
           </div>
           <div className="relative">
@@ -846,12 +847,12 @@ function SessionsTab() {
                 setSortBy(e.target.value as SessionSort)
               }
               className="input-electric pl-7 pr-6 py-1 text-xs appearance-none cursor-pointer"
-              title="Sort sessions"
-              aria-label="Sort sessions"
+              title={t('dashboard.sort_sessions')}
+              aria-label={t('dashboard.sort_sessions')}
             >
               {SESSION_SORT_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>
-                  {o.label}
+                  {t(o.labelKey)}
                 </option>
               ))}
             </select>
@@ -865,9 +866,9 @@ function SessionsTab() {
               value={agentFilter}
               onChange={(e) => setAgentFilter(e.target.value)}
               className="input-electric pl-7 pr-6 py-1 text-xs appearance-none cursor-pointer"
-              title="Filter by owning agent"
+              title={t('dashboard.filter_agent')}
             >
-              <option value="">All agents</option>
+              <option value="">{t('dashboard.all_agents')}</option>
               {knownAgents.map((a) => (
                 <option key={a} value={a}>
                   {a}
@@ -884,9 +885,9 @@ function SessionsTab() {
               value={channelFilter}
               onChange={(e) => setChannelFilter(e.target.value)}
               className="input-electric pl-7 pr-6 py-1 text-xs appearance-none cursor-pointer"
-              title="Filter by owning channel"
+              title={t('dashboard.filter_channel')}
             >
-              <option value="">All channels</option>
+              <option value="">{t('dashboard.all_channels')}</option>
               {knownChannels.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -901,7 +902,7 @@ function SessionsTab() {
         <p className="text-sm py-8 text-center" style={{ color: 'var(--pc-text-faint)' }}>
           {sessions.length === 0
             ? t('dashboard.no_sessions')
-            : 'No sessions match the current search and filters'}
+            : t('dashboard.no_sessions_filtered')}
         </p>
       ) : (
         <div className="space-y-2 overflow-y-auto max-h-[32rem]">
@@ -928,7 +929,7 @@ function SessionsTab() {
                         background: 'rgba(var(--pc-accent-rgb), 0.10)',
                         color: 'var(--pc-accent-light)',
                       }}
-                      title={`Open agents.${session.agent_alias} config`}
+                      title={t('dashboard.open_agent_config').replace('{alias}', session.agent_alias)}
                     >
                       {session.agent_alias}
                     </EntityLink>
@@ -942,7 +943,7 @@ function SessionsTab() {
                         background: 'rgba(167, 139, 250, 0.10)',
                         color: '#a78bfa',
                       }}
-                      title={`Open channels.${session.channel_id} config`}
+                      title={t('dashboard.open_channel_config').replace('{id}', session.channel_id)}
                     >
                       {session.channel_id}
                     </EntityLink>
@@ -964,7 +965,7 @@ function SessionsTab() {
                   type="button"
                   onClick={() => openInspect(session)}
                   className="p-1.5 rounded-lg hover:bg-[var(--pc-hover)]"
-                  title="View messages"
+                  title={t('dashboard.view_messages')}
                   style={{ color: 'var(--pc-text-muted)' }}
                 >
                   <Eye className="h-4 w-4" />
@@ -974,7 +975,7 @@ function SessionsTab() {
                   onClick={() => handleDelete(session)}
                   disabled={deleting === session.session_key}
                   className="p-1.5 rounded-lg hover:bg-[var(--pc-hover)] disabled:opacity-50"
-                  title="Delete session"
+                  title={t('dashboard.delete_session')}
                   style={{ color: 'var(--color-status-error)' }}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -1001,7 +1002,7 @@ function SessionsTab() {
                   className="text-xs uppercase tracking-wider mb-1"
                   style={{ color: 'var(--pc-text-faint)' }}
                 >
-                  Session
+                  {t('dashboard.session_dialog_title')}
                 </p>
                 <p
                   className="text-sm font-mono break-all"
@@ -1048,9 +1049,9 @@ function SessionsTab() {
                       color: 'var(--pc-text-muted)',
                       borderColor: 'var(--pc-border)',
                     }}
-                    title="Flip transcript order"
+                    title={t('dashboard.flip_transcript')}
                   >
-                    {inspectNewestFirst ? 'newest first' : 'oldest first'}
+                    {inspectNewestFirst ? t('dashboard.newest_first') : t('dashboard.oldest_first')}
                   </button>
                 )}
                 <button
@@ -1058,7 +1059,7 @@ function SessionsTab() {
                   onClick={() => setInspect(null)}
                   className="p-1 rounded-lg hover:bg-[var(--pc-hover)]"
                   style={{ color: 'var(--pc-text-muted)' }}
-                  title="Close"
+                  title={t('common.close')}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -1071,7 +1072,7 @@ function SessionsTab() {
                 </p>
               ) : inspect.messages === null ? (
                 <p className="text-sm" style={{ color: 'var(--pc-text-muted)' }}>
-                  Loading transcript…
+                  {t('dashboard.loading_transcript')}
                 </p>
               ) : inspect.messages.length === 0 ? (
                 <p className="text-sm" style={{ color: 'var(--pc-text-faint)' }}>
@@ -1245,7 +1246,7 @@ function ChannelsTab() {
                       </EntityLink>
                     </>
                   ) : (
-                    'no owning agent'
+                    t('dashboard.no_owning_agent')
                   )}
                 </span>
               </div>
@@ -1718,11 +1719,11 @@ function CostTab({
 
 type MemorySort = 'newest' | 'oldest' | 'key-asc' | 'key-desc';
 
-const MEMORY_SORT_OPTIONS: { value: MemorySort; label: string }[] = [
-  { value: 'newest', label: 'Newest first' },
-  { value: 'oldest', label: 'Oldest first' },
-  { value: 'key-asc', label: 'Key A → Z' },
-  { value: 'key-desc', label: 'Key Z → A' },
+const MEMORY_SORT_OPTIONS: { value: MemorySort; labelKey: string }[] = [
+  { value: 'newest', labelKey: 'dashboard.memory_sort_newest' },
+  { value: 'oldest', labelKey: 'dashboard.memory_sort_oldest' },
+  { value: 'key-asc', labelKey: 'dashboard.memory_sort_key_asc' },
+  { value: 'key-desc', labelKey: 'dashboard.memory_sort_key_desc' },
 ];
 
 function isMemorySort(v: string): v is MemorySort {
@@ -1835,7 +1836,7 @@ function MemoriesTab() {
 
   const handleDelete = async (entry: MemoryEntry) => {
     if (deleting) return;
-    if (!window.confirm(`Delete memory ${entry.key}? This cannot be undone.`)) return;
+    if (!window.confirm(`${t('dashboard.delete_memory')}: ${entry.key}？`)) return;
     setDeleting(entry.id);
     try {
       // Per-agent rows resolve through the agent's own memory backend; the
@@ -1853,7 +1854,7 @@ function MemoriesTab() {
 
   const handleAdd = async () => {
     if (!formKey.trim() || !formContent.trim()) {
-      setFormError('Key and content are required');
+      setFormError(t('dashboard.memory_required_error'));
       return;
     }
     setSubmitting(true);
@@ -1887,7 +1888,7 @@ function MemoriesTab() {
             style={{ borderColor: 'var(--pc-border)', borderTopColor: 'var(--pc-accent)' }}
           />
           <span className="text-sm" style={{ color: 'var(--pc-text-muted)' }}>
-            Loading memories…
+            {t('common.loading')}
           </span>
         </div>
       </div>
@@ -1917,7 +1918,7 @@ function MemoriesTab() {
           className="text-sm font-semibold uppercase tracking-wider"
           style={{ color: 'var(--pc-text-primary)' }}
         >
-          Memories
+          {t('dashboard.memories_title')}
         </h2>
         <span
           className="text-xs font-mono px-2 py-0.5 rounded-full"
@@ -1939,7 +1940,7 @@ function MemoriesTab() {
             setFormAgent(agentFilter);
           }}
           className="btn-electric text-xs ml-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg"
-          title="Add a memory entry"
+          title={t('dashboard.add_memory')}
         >
           <Plus className="h-3 w-3" />
           {t('dashboard.add_memory')}
@@ -1955,10 +1956,10 @@ function MemoriesTab() {
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search…"
+              placeholder={t('dashboard.search_memories')}
               className="input-electric pl-7 pr-2 py-1 text-xs w-40"
-              title="Backend-side recall — searches across the configured memory store. Combined with the agent and category filters."
-              aria-label="Search memories"
+              title={t('dashboard.search_memories_hint')}
+              aria-label={t('dashboard.search_memories')}
             />
           </div>
           <div className="relative">
@@ -1970,12 +1971,12 @@ function MemoriesTab() {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as MemorySort)}
               className="input-electric pl-7 pr-6 py-1 text-xs appearance-none cursor-pointer"
-              title="Sort memories"
-              aria-label="Sort memories"
+              title={t('dashboard.sort_memories')}
+              aria-label={t('dashboard.sort_memories')}
             >
               {MEMORY_SORT_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>
-                  {o.label}
+                  {t(o.labelKey)}
                 </option>
               ))}
             </select>
@@ -1989,9 +1990,9 @@ function MemoriesTab() {
               value={agentFilter}
               onChange={(e) => setFilter('agent', e.target.value)}
               className="input-electric pl-7 pr-6 py-1 text-xs appearance-none cursor-pointer"
-              title="Filter by owning agent"
+              title={t('dashboard.filter_agent')}
             >
-              <option value="">All agents</option>
+              <option value="">{t('dashboard.all_agents')}</option>
               {knownAgents.map((a) => (
                 <option key={a} value={a}>
                   {a}
@@ -2008,9 +2009,9 @@ function MemoriesTab() {
               value={categoryFilter}
               onChange={(e) => setFilter('category', e.target.value)}
               className="input-electric pl-7 pr-6 py-1 text-xs appearance-none cursor-pointer"
-              title="Filter by category"
+              title={t('dashboard.filter_category')}
             >
-              <option value="">All categories</option>
+              <option value="">{t('dashboard.all_categories')}</option>
               {knownCategories.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -2023,7 +2024,7 @@ function MemoriesTab() {
 
       {visibleEntries.length === 0 ? (
         <p className="text-sm py-8 text-center" style={{ color: 'var(--pc-text-faint)' }}>
-          No memories match the current search and filters
+          {t('dashboard.no_memories_filtered')}
         </p>
       ) : (
         <div className="space-y-2 overflow-y-auto max-h-[32rem]">
@@ -2085,7 +2086,7 @@ function MemoriesTab() {
                 onClick={() => handleDelete(entry)}
                 disabled={deleting === entry.id}
                 className="p-1.5 rounded-lg hover:bg-[var(--pc-hover)] disabled:opacity-50 flex-shrink-0"
-                title="Delete memory"
+                title={t('dashboard.delete_memory')}
                 style={{ color: 'var(--color-status-error)' }}
               >
                 <Trash2 className="h-4 w-4" />
@@ -2139,13 +2140,13 @@ function MemoriesTab() {
                   className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
                   style={{ color: 'var(--pc-text-secondary)' }}
                 >
-                  Key <span style={{ color: 'var(--color-status-error)' }}>*</span>
+                  {t('dashboard.memory_key')} <span style={{ color: 'var(--color-status-error)' }}>*</span>
                 </label>
                 <input
                   type="text"
                   value={formKey}
                   onChange={(e) => setFormKey(e.target.value)}
-                  placeholder="e.g. user_preferences"
+                  placeholder={t('dashboard.memory_key_placeholder')}
                   className="input-electric w-full px-3 py-2.5 text-sm"
                 />
               </div>
@@ -2154,12 +2155,12 @@ function MemoriesTab() {
                   className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
                   style={{ color: 'var(--pc-text-secondary)' }}
                 >
-                  Content <span style={{ color: 'var(--color-status-error)' }}>*</span>
+                  {t('dashboard.memory_content')} <span style={{ color: 'var(--color-status-error)' }}>*</span>
                 </label>
                 <textarea
                   value={formContent}
                   onChange={(e) => setFormContent(e.target.value)}
-                  placeholder="Memory content…"
+                  placeholder={t('dashboard.memory_content_placeholder')}
                   rows={4}
                   className="input-electric w-full px-3 py-2.5 text-sm resize-none"
                 />
@@ -2169,13 +2170,13 @@ function MemoriesTab() {
                   className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
                   style={{ color: 'var(--pc-text-secondary)' }}
                 >
-                  Category (optional)
+                  {t('dashboard.memory_category_optional')}
                 </label>
                 <input
                   type="text"
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value)}
-                  placeholder="e.g. preferences, context, facts"
+                  placeholder={t('dashboard.memory_category_placeholder')}
                   className="input-electric w-full px-3 py-2.5 text-sm"
                 />
               </div>
@@ -2184,7 +2185,7 @@ function MemoriesTab() {
                   className="block text-xs font-semibold mb-1.5 uppercase tracking-wider"
                   style={{ color: 'var(--pc-text-secondary)' }}
                 >
-                  Agent (optional)
+                  {t('dashboard.memory_agent_optional')}
                 </label>
                 <select
                   value={formAgent}
@@ -2202,8 +2203,7 @@ function MemoriesTab() {
                   className="text-[11px] mt-1"
                   style={{ color: 'var(--pc-text-faint)' }}
                 >
-                  Picks which agent's memory backend the row lands in. Leave
-                  blank to write to the gateway's default backend.
+                  {t('dashboard.memory_agent_help')}
                 </p>
               </div>
             </div>
@@ -2213,7 +2213,7 @@ function MemoriesTab() {
                 onClick={() => setShowAddForm(false)}
                 className="btn-secondary px-4 py-2 text-sm font-medium"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 type="button"
@@ -2221,7 +2221,7 @@ function MemoriesTab() {
                 disabled={submitting}
                 className="btn-electric px-4 py-2 text-sm font-medium disabled:opacity-50"
               >
-                {submitting ? 'Saving…' : 'Save'}
+                {submitting ? t('onboard.saving') : t('common.save')}
               </button>
             </div>
           </div>
@@ -2269,8 +2269,8 @@ function MemoryContent({
           style={{ color: 'var(--pc-accent)' }}
         >
           {expanded
-            ? 'Collapse'
-            : `Expand (${content.length.toLocaleString()} chars, ${newlines + 1} lines)`}
+            ? t('dashboard.collapse')
+            : `${t('dashboard.expand')} (${content.length.toLocaleString()} chars, ${newlines + 1} lines)`}
         </button>
       )}
     </>
@@ -2301,7 +2301,7 @@ function truncateForPreview(content: string): string {
 
 function AgentsSection() {
   const [agents, setAgents] = useState<AgentSummary[] | null>(null);
-  const [onboardButtonLabel, setOnboardButtonLabel] = useState('Start onboarding');
+  const [onboardButtonLabel, setOnboardButtonLabel] = useState(t('dashboard.start_onboarding'));
   const [error, setError] = useState<string | null>(null);
   const [toggling, setToggling] = useState<Set<string>>(new Set());
 
@@ -2309,7 +2309,7 @@ function AgentsSection() {
     loadAgentSummaries()
       .then(setAgents)
       .catch((err: unknown) =>
-        setError(err instanceof Error ? err.message : 'Failed to load agents'),
+        setError(err instanceof Error ? err.message : t('dashboard.load_agents_error')),
       );
   }, []);
 
@@ -2317,14 +2317,14 @@ function AgentsSection() {
     getOnboardStatus()
       .then((status) => {
         if (status.reason === 'has_dispatchable_agent') {
-          setOnboardButtonLabel('Run onboarding again');
+          setOnboardButtonLabel(t('dashboard.run_onboarding_again'));
         } else if (status.has_partial_state || status.reason === 'incomplete_agent') {
-          setOnboardButtonLabel('Continue onboarding');
+          setOnboardButtonLabel(t('dashboard.continue_onboarding'));
         } else {
-          setOnboardButtonLabel('Start onboarding');
+          setOnboardButtonLabel(t('dashboard.start_onboarding'));
         }
       })
-      .catch(() => setOnboardButtonLabel('Start onboarding'));
+      .catch(() => setOnboardButtonLabel(t('dashboard.start_onboarding')));
   }, []);
 
   const handleToggle = useCallback(async (agent: AgentSummary) => {
@@ -2385,7 +2385,7 @@ function AgentsSection() {
           className="text-xs flex items-center gap-1 hover:underline"
           style={{ color: 'var(--pc-text-muted)' }}
         >
-          {hiddenCount > 0 ? `View all (${sortedAgents!.length})` : 'View all'}
+          {hiddenCount > 0 ? `${t('dashboard.view_all')} (${sortedAgents!.length})` : t('dashboard.view_all')}
           <ChevronRight className="h-3 w-3" />
         </Link>
       </header>
@@ -2408,7 +2408,7 @@ function AgentsSection() {
           className="rounded-2xl border p-6 text-center text-sm"
           style={{ borderColor: 'var(--pc-border)', color: 'var(--pc-text-muted)' }}
         >
-          Loading agents...
+          {t('dashboard.loading_agents')}
         </div>
       ) : agents.length === 0 ? (
         <div
@@ -2419,7 +2419,7 @@ function AgentsSection() {
             className="text-sm font-medium mb-2"
             style={{ color: 'var(--pc-text-primary)' }}
           >
-            No agents configured yet.
+            {t('agents.empty_title')}
           </p>
           <Link
             to="/onboard"
@@ -2452,9 +2452,9 @@ function AgentsSection() {
             >
               <Plus className="h-6 w-6 mb-2" style={{ color: 'var(--pc-accent)' }} />
               <p className="text-sm font-medium" style={{ color: 'var(--pc-text-primary)' }}>
-                {hiddenCount} more {hiddenCount === 1 ? 'agent' : 'agents'}
+                {hiddenCount} {t('dashboard.more_agents')}
               </p>
-              <p className="text-xs mt-1">View all on /agents</p>
+              <p className="text-xs mt-1">{t('dashboard.view_all_agents')}</p>
             </Link>
           )}
         </div>
