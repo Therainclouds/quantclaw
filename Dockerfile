@@ -14,6 +14,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
     && rm -rf /var/lib/apt/lists/*
+COPY --chmod=755 scripts/cargo-mirror-fallback.sh /usr/local/bin/cargo-mirror-fallback.sh
 COPY web/package.json web/package-lock.json web/
 RUN cd web && npm ci --ignore-scripts
 COPY . .
@@ -23,7 +24,7 @@ RUN mkdir -p apps/tauri/src \
 RUN --mount=type=cache,id=zeroclaw-cargo-registry,target=/usr/local/cargo/registry,sharing=locked \
     --mount=type=cache,id=zeroclaw-cargo-git,target=/usr/local/cargo/git,sharing=locked \
     --mount=type=cache,id=zeroclaw-web-target,target=/app/target,sharing=locked \
-    cargo web build
+    /usr/local/bin/cargo-mirror-fallback.sh cargo cargo web build
 
 # ── Stage 1: Build ────────────────────────────────────────────
 FROM rust:1.94-slim@sha256:da9dab7a6b8dd428e71718402e97207bb3e54167d37b5708616050b1e8f60ed6 AS builder
@@ -37,6 +38,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && apt-get install -y \
         pkg-config \
     && rm -rf /var/lib/apt/lists/*
+COPY --chmod=755 scripts/cargo-mirror-fallback.sh /usr/local/bin/cargo-mirror-fallback.sh
 
 # 1. Copy manifests to cache dependencies
 COPY Cargo.toml Cargo.lock ./
@@ -74,11 +76,12 @@ RUN mkdir -p src src/bin benches apps/tauri/src tools/fill-translations/src xtas
 RUN --mount=type=cache,id=zeroclaw-cargo-registry,target=/usr/local/cargo/registry,sharing=locked \
     --mount=type=cache,id=zeroclaw-cargo-git,target=/usr/local/cargo/git,sharing=locked \
     --mount=type=cache,id=zeroclaw-target,target=/app/target,sharing=locked \
-    if [ -n "$ZEROCLAW_CARGO_FEATURES" ]; then \
-      cargo build --release --locked --features "$ZEROCLAW_CARGO_FEATURES"; \
-    else \
-      cargo build --release --locked; \
-    fi
+    /usr/local/bin/cargo-mirror-fallback.sh cargo sh -c '\
+      if [ -n "$ZEROCLAW_CARGO_FEATURES" ]; then \
+        cargo build --release --locked --features "$ZEROCLAW_CARGO_FEATURES"; \
+      else \
+        cargo build --release --locked; \
+      fi'
 RUN rm -rf src benches crates xtask tools/fill-translations
 
 # 2. Copy only build-relevant source paths (avoid cache-busting on docs/tests/scripts)
@@ -102,13 +105,14 @@ RUN --mount=type=cache,id=zeroclaw-cargo-registry,target=/usr/local/cargo/regist
            target/release/deps/xtask-* \
            target/release/.fingerprint/fill-translations-* \
            target/release/deps/fill_translations-* && \
-    if [ -n "$ZEROCLAW_CARGO_FEATURES" ]; then \
-      cargo build --release --locked --features "$ZEROCLAW_CARGO_FEATURES"; \
-    else \
-      cargo build --release --locked; \
-    fi && \
-    cp target/release/zeroclaw /app/zeroclaw && \
-    strip /app/zeroclaw
+    /usr/local/bin/cargo-mirror-fallback.sh cargo sh -c '\
+      if [ -n "$ZEROCLAW_CARGO_FEATURES" ]; then \
+        cargo build --release --locked --features "$ZEROCLAW_CARGO_FEATURES"; \
+      else \
+        cargo build --release --locked; \
+      fi && \
+      cp target/release/zeroclaw /app/zeroclaw && \
+      strip /app/zeroclaw'
 RUN size=$(stat -c%s /app/zeroclaw) && \
     if [ "$size" -lt 1000000 ]; then echo "ERROR: binary too small (${size} bytes), likely dummy build artifact" && exit 1; fi
 
@@ -131,8 +135,9 @@ RUN mkdir -p /zeroclaw-data/.zeroclaw /zeroclaw-data/data && \
         '' \
         '[risk_profiles.default]' \
         'level = "supervised"' \
-        'auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations"]' \
+        'auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "browser", "browser_open"]' \
         > /zeroclaw-data/.zeroclaw/config.toml && \
+    /app/zeroclaw config migrate --config-dir /zeroclaw-data/.zeroclaw && \
     chown -R 65534:65534 /zeroclaw-data
 
 # ── Stage 2: Development Runtime (Debian) ────────────────────
