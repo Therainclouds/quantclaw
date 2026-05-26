@@ -1583,6 +1583,7 @@ function CostTab({
           Window
         </label>
         <select
+          title={t('dashboard.select_time_window')}
           value={costWindow}
           onChange={(e) => onWindowChange(e.target.value as CostWindow)}
           className="input-electric text-sm px-2 py-1 appearance-none cursor-pointer"
