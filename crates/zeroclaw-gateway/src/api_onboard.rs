@@ -195,6 +195,41 @@ pub struct SectionsResponse {
     pub sections: Vec<SectionInfo>,
 }
 
+#[derive(Debug, Clone, Copy, Serialize)]
+#[cfg_attr(feature = "schema-export", derive(schemars::JsonSchema))]
+#[serde(rename_all = "snake_case")]
+pub enum ChannelSetupMode {
+    QrLogin,
+    BotCredentials,
+    WebhookOutgoing,
+}
+
+#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "schema-export", derive(schemars::JsonSchema))]
+pub struct ChannelCatalogEntry {
+    /// Stable channel type key (`wechat`, `qq`, `wecom`).
+    pub key: String,
+    /// How the operator is expected to provision this channel in the current
+    /// product tier. This is UI metadata only; config remains the single
+    /// source of truth.
+    pub setup_mode: ChannelSetupMode,
+    /// `true` when the current implementation can receive inbound messages.
+    pub supports_inbound: bool,
+    /// `true` when the current implementation supports a QR-based login flow.
+    pub supports_qr_login: bool,
+    /// `true` when the current implementation can bind external identities to
+    /// a configured channel.
+    pub supports_binding: bool,
+    /// Number of configured aliases under `channels.<type>.*`.
+    pub configured_aliases: usize,
+}
+
+#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "schema-export", derive(schemars::JsonSchema))]
+pub struct ChannelCatalogResponse {
+    pub channels: Vec<ChannelCatalogEntry>,
+}
+
 #[derive(Debug, Serialize)]
 #[cfg_attr(feature = "schema-export", derive(schemars::JsonSchema))]
 pub struct OnboardStatusResponse {
@@ -335,6 +370,85 @@ pub async fn handle_onboard_status(State(state): State<AppState>, headers: Heade
     }
     let cfg = state.config.read().clone();
     axum::Json(derive_onboard_status(&cfg)).into_response()
+}
+
+pub fn build_channel_catalog(
+    cfg: &zeroclaw_config::schema::Config,
+) -> Vec<ChannelCatalogEntry> {
+    let available_types: std::collections::HashSet<String> = schema_walk_picker(cfg, "channels")
+        .into_iter()
+        .map(|item| item.key)
+        .collect();
+
+    let count_aliases = |channel_type: &str| -> usize {
+        let mut aliases = std::collections::BTreeSet::new();
+        let prefix = format!("channels.{channel_type}.");
+        for field in cfg.prop_fields() {
+            if let Some(rest) = field.name.strip_prefix(&prefix)
+                && let Some(alias) = rest.split('.').next()
+                && !alias.is_empty()
+            {
+                aliases.insert(alias.to_string());
+            }
+        }
+        aliases.len()
+    };
+
+    let catalog = [
+        (
+            "wechat",
+            ChannelSetupMode::QrLogin,
+            true,
+            true,
+            true,
+        ),
+        (
+            "qq",
+            ChannelSetupMode::BotCredentials,
+            true,
+            false,
+            false,
+        ),
+        (
+            "wecom",
+            ChannelSetupMode::WebhookOutgoing,
+            false,
+            false,
+            false,
+        ),
+    ];
+
+    catalog
+        .into_iter()
+        .filter(|(key, _, _, _, _)| available_types.contains(*key))
+        .map(
+            |(key, setup_mode, supports_inbound, supports_qr_login, supports_binding)| {
+                ChannelCatalogEntry {
+                    key: key.to_string(),
+                    setup_mode,
+                    supports_inbound,
+                    supports_qr_login,
+                    supports_binding,
+                    configured_aliases: count_aliases(key),
+                }
+            },
+        )
+        .collect()
+}
+
+/// `GET /api/onboard/channels` — curated channel setup catalog for the web
+/// wizard. This exposes capability metadata for a small set of
+/// product-prioritized channels while keeping config/schema as the source of
+/// truth for the actual picker and form rendering.
+pub async fn handle_channel_catalog(State(state): State<AppState>, headers: HeaderMap) -> Response {
+    if let Err(e) = require_auth(&state, &headers) {
+        return e.into_response();
+    }
+    let cfg = state.config.read().clone();
+    axum::Json(ChannelCatalogResponse {
+        channels: build_channel_catalog(&cfg),
+    })
+    .into_response()
 }
 
 /// All alias-reference choices an agent form needs, in one round-trip.

@@ -415,6 +415,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'picker.filter_hint': '输入关键字筛选。按回车选择，按 Esc 跳过。',
     'picker.no_matches': '没有匹配项，请尝试其他筛选词。',
     'picker.load_error': '加载选择列表失败',
+    'picker.channel_catalog_error': '加载渠道向导失败',
 
     // Health
     'health.title': '系统健康',
@@ -544,6 +545,21 @@ const translations: Record<Locale, Record<string, string>> = {
     'config.adding': '添加中...',
     'config.click_confirm_delete': '再次点击确认删除',
     'config.delete_alias': '删除此别名',
+    'channels.wizard_title': '国内渠道快捷配置',
+    'channels.wizard_subtitle': '先选择要接入的渠道，再进入该渠道的专用配置流程。',
+    'channels.card.configure': '开始配置',
+    'channels.card.configured': '已配置 {count} 个别名',
+    'channels.card.unconfigured': '尚未配置',
+    'channels.capability.qr_login': '二维码登录',
+    'channels.capability.binding': '支持绑定',
+    'channels.capability.inbound': '支持接收入站消息',
+    'channels.capability.send_only': '发送型接入',
+    'channels.wechat.title': '微信',
+    'channels.wechat.summary': '优先支持微信二维码登录、绑定与后续状态引导。',
+    'channels.qq.title': 'QQ Bot',
+    'channels.qq.summary': '通过 QQ Bot 凭据接入，第一期先提供专用图形化配置向导。',
+    'channels.wecom.title': '企业微信',
+    'channels.wecom.summary': '当前优先支持 webhook 发送型接入，双向回调能力后续再补。',
 
     // Cron
     'cron.agent_required_error': '请选择要执行此定时任务的智能体',
@@ -1005,6 +1021,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'picker.filter_hint': 'Filter items. Press Enter to choose or Esc to skip.',
     'picker.no_matches': 'No matches. Try a different filter.',
     'picker.load_error': 'Failed to load picker',
+    'picker.channel_catalog_error': 'Failed to load channel wizard',
 
     // Health
     'health.title': 'System Health',
@@ -1133,6 +1150,21 @@ const translations: Record<Locale, Record<string, string>> = {
     'config.adding': 'Adding...',
     'config.click_confirm_delete': 'Click again to confirm delete',
     'config.delete_alias': 'Delete this alias',
+    'channels.wizard_title': 'China channel quick setup',
+    'channels.wizard_subtitle': 'Choose a channel first, then continue through its dedicated setup flow.',
+    'channels.card.configure': 'Configure',
+    'channels.card.configured': '{count} aliases configured',
+    'channels.card.unconfigured': 'Not configured yet',
+    'channels.capability.qr_login': 'QR login',
+    'channels.capability.binding': 'Binding supported',
+    'channels.capability.inbound': 'Inbound messaging',
+    'channels.capability.send_only': 'Send-only integration',
+    'channels.wechat.title': 'WeChat',
+    'channels.wechat.summary': 'Prioritize QR login, identity binding, and guided status feedback for WeChat.',
+    'channels.qq.title': 'QQ Bot',
+    'channels.qq.summary': 'Provision with QQ Bot credentials; phase one focuses on a guided graphical setup flow.',
+    'channels.wecom.title': 'WeCom',
+    'channels.wecom.summary': 'Prioritize webhook-based outbound setup first; bidirectional callbacks come later.',
 
     // Cron
     'cron.agent_required_error': 'Pick an agent for this cron job',

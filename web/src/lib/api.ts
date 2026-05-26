@@ -956,6 +956,23 @@ export function getOnboardStatus(): Promise<OnboardStatusResponse> {
   return apiFetch<OnboardStatusResponse>('/api/onboard/status');
 }
 
+export interface ChannelCatalogEntry {
+  key: string;
+  setup_mode: 'qr_login' | 'bot_credentials' | 'webhook_outgoing';
+  supports_inbound: boolean;
+  supports_qr_login: boolean;
+  supports_binding: boolean;
+  configured_aliases: number;
+}
+
+export interface ChannelCatalogResponse {
+  channels: ChannelCatalogEntry[];
+}
+
+export function getChannelCatalog(): Promise<ChannelCatalogResponse> {
+  return apiFetch<ChannelCatalogResponse>('/api/onboard/channels');
+}
+
 export interface AgentOptionsResponse {
   channels: string[];
   channel_types: string[];

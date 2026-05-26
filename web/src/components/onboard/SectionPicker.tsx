@@ -16,7 +16,9 @@ import { fuzzyFilter } from '../../lib/fuzzy';
 import { t } from '../../lib/i18n';
 import {
   ApiError,
+  getChannelCatalog,
   getSectionPicker,
+  type ChannelCatalogEntry,
   type PickerItem,
 } from '../../lib/api';
 
@@ -46,7 +48,38 @@ export default function SectionPicker({
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState('');
   const [highlightIdx, setHighlightIdx] = useState(0);
+  const [channelCatalog, setChannelCatalog] = useState<ChannelCatalogEntry[]>([]);
+  const [channelCatalogError, setChannelCatalogError] = useState<string | null>(null);
   const filterRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (sectionKey !== 'channels') {
+      setChannelCatalog([]);
+      setChannelCatalogError(null);
+      return () => {
+        cancelled = true;
+      };
+    }
+    setChannelCatalogError(null);
+    getChannelCatalog()
+      .then((resp) => {
+        if (cancelled) return;
+        setChannelCatalog(resp.channels);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setChannelCatalog([]);
+        if (e instanceof ApiError) {
+          setChannelCatalogError(`[${e.envelope.code}] ${e.envelope.message}`);
+        } else {
+          setChannelCatalogError(`${t('picker.channel_catalog_error')}: ${e instanceof Error ? e.message : String(e)}`);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [sectionKey]);
 
   useEffect(() => {
     let cancelled = false;
@@ -113,6 +146,100 @@ export default function SectionPicker({
 
   return (
     <div className="flex flex-col gap-4">
+      {sectionKey === 'channels' && channelCatalog.length > 0 && (
+        <div className="flex flex-col gap-3">
+          <div>
+            <h3
+              className="text-sm font-semibold"
+              style={{ color: 'var(--pc-text-primary)' }}
+            >
+              {t('channels.wizard_title')}
+            </h3>
+            <p
+              className="text-sm mt-1"
+              style={{ color: 'var(--pc-text-secondary)' }}
+            >
+              {t('channels.wizard_subtitle')}
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            {channelCatalog.map((entry) => (
+              <button
+                key={entry.key}
+                type="button"
+                onClick={() => onPick({ key: entry.key, label: channelLabel(entry.key) })}
+                className="surface-panel text-left p-4 transition-colors hover:opacity-100"
+                style={{ borderColor: 'var(--pc-border)' }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div
+                      className="text-sm font-semibold"
+                      style={{ color: 'var(--pc-text-primary)' }}
+                    >
+                      {channelLabel(entry.key)}
+                    </div>
+                    <p
+                      className="text-xs mt-1 leading-relaxed"
+                      style={{ color: 'var(--pc-text-secondary)' }}
+                    >
+                      {channelSummary(entry.key)}
+                    </p>
+                  </div>
+                  <span
+                    className="text-[11px] px-2 py-0.5 rounded-full whitespace-nowrap"
+                    style={{
+                      background: entry.configured_aliases > 0 ? 'rgba(0, 230, 138, 0.12)' : 'var(--pc-bg-elevated)',
+                      color: entry.configured_aliases > 0 ? 'var(--color-status-success)' : 'var(--pc-text-secondary)',
+                    }}
+                  >
+                    {entry.configured_aliases > 0
+                      ? t('channels.card.configured').replace('{count}', String(entry.configured_aliases))
+                      : t('channels.card.unconfigured')}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {channelCapabilities(entry).map((capability) => (
+                    <span
+                      key={`${entry.key}-${capability}`}
+                      className="text-[11px] px-2 py-0.5 rounded-full"
+                      style={{
+                        background: 'var(--pc-bg-elevated)',
+                        color: 'var(--pc-text-secondary)',
+                      }}
+                    >
+                      {capability}
+                    </span>
+                  ))}
+                </div>
+
+                <div
+                  className="mt-4 text-xs font-medium"
+                  style={{ color: 'var(--pc-accent)' }}
+                >
+                  {t('channels.card.configure')}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {channelCatalogError && (
+            <div
+              className="rounded-xl border p-3 text-sm animate-fade-in"
+              style={{
+                background: 'rgba(239, 68, 68, 0.08)',
+                borderColor: 'rgba(239, 68, 68, 0.2)',
+                color: '#f87171',
+              }}
+            >
+              {channelCatalogError}
+            </div>
+          )}
+        </div>
+      )}
+
       {help && (
         <p
           className="text-sm"
@@ -243,4 +370,30 @@ export default function SectionPicker({
 
 function badgeIsGood(badge: string | undefined): boolean {
   return badge === 'configured' || badge === 'active' || badge === 'set';
+}
+
+function channelLabel(key: string): string {
+  if (key === 'wechat') return t('channels.wechat.title');
+  if (key === 'qq') return t('channels.qq.title');
+  if (key === 'wecom') return t('channels.wecom.title');
+  return key;
+}
+
+function channelSummary(key: string): string {
+  if (key === 'wechat') return t('channels.wechat.summary');
+  if (key === 'qq') return t('channels.qq.summary');
+  if (key === 'wecom') return t('channels.wecom.summary');
+  return key;
+}
+
+function channelCapabilities(entry: ChannelCatalogEntry): string[] {
+  const caps: string[] = [];
+  if (entry.supports_qr_login) caps.push(t('channels.capability.qr_login'));
+  if (entry.supports_binding) caps.push(t('channels.capability.binding'));
+  if (entry.supports_inbound) {
+    caps.push(t('channels.capability.inbound'));
+  } else {
+    caps.push(t('channels.capability.send_only'));
+  }
+  return caps;
 }
