@@ -42,6 +42,7 @@ import { useConfigDraft } from '../../lib/draftStore';
 import { fuzzyFilter } from '../../lib/fuzzy';
 import { isLocalModelProviderName } from '../../lib/modelProviders';
 import EntityEnabledToggle from '../EntityEnabledToggle';
+import ChannelSetupGuide from './ChannelSetupGuide';
 
 function entryValue(entry: ListResponseEntry): unknown {
   return entry.populated ? entry.value : undefined;
@@ -678,6 +679,8 @@ const FieldForm = forwardRef<FieldFormHandle, FieldFormProps>(function FieldForm
     return n;
   }, [entries, draft, comments, configDraft.tombstones]);
 
+  const channelGuide = guideChannelForPrefix(prefix);
+
   // Warn user before navigating away with unsaved changes.
   useEffect(() => {
     if (unsavedCount === 0) return;
@@ -730,6 +733,8 @@ const FieldForm = forwardRef<FieldFormHandle, FieldFormProps>(function FieldForm
           covered. inlineSaveBar drops both — the save bar is rendered
           tight against the last field as a footer of the embedding
           card. */}
+      {channelGuide && <ChannelSetupGuide channelKey={channelGuide} mode="form" />}
+
       {(title || enabledEntry) && (
         <div className="flex items-center justify-between gap-3 flex-wrap">
           {title ? (
@@ -907,6 +912,14 @@ const FieldForm = forwardRef<FieldFormHandle, FieldFormProps>(function FieldForm
 });
 
 export default FieldForm;
+
+function guideChannelForPrefix(prefix: string): 'wechat' | 'qq' | 'wecom' | null {
+  const channelKey = prefix.split('.')[1];
+  if (channelKey === 'wechat' || channelKey === 'qq' || channelKey === 'wecom') {
+    return channelKey;
+  }
+  return null;
+}
 
 interface FieldRowProps {
   entry: ListResponseEntry;

@@ -119,13 +119,14 @@
 
 - `QQ`、`微信`、`企业微信` 的入口与说明卡片
 - 渠道专用帮助文案、字段说明、连接提示
-- 微信二维码扫描创建与绑定体验的实现规划与落地
+- 微信二维码扫描创建与绑定体验的安全方案设计
 - 频道专用状态与流程引导
 
 预期结果：
 
 - 用户无需直接编辑 TOML 即可完成常见配置
-- 微信通道支持二维码扫描创建路径
+- 本期完成 `QQ / 企业微信` 专用向导壳层
+- 微信二维码运行逻辑后置到 daemon / channels orchestrator 侧实现，不在 gateway 内直接落地
 
 ## 8. 主要影响面
 
@@ -167,6 +168,12 @@
 - `crates/zeroclaw-channels/src/wechat.rs`
 - `crates/zeroclaw-channels/src/wecom.rs`
 
+### 微信二维码后置实现
+
+- `src/main.rs`
+- `crates/zeroclaw-channels/src/orchestrator/mod.rs`
+- `crates/zeroclaw-channels/src/wechat.rs`
+
 ## 9. 风险
 
 ### 低风险
@@ -184,7 +191,7 @@
 ### 高风险
 
 - `QQ` / `微信` / `企业微信` 专用向导涉及 `config + gateway + web + channels` 多层联动
-- 微信二维码扫描创建流程涉及状态流转、错误态、安全控制与绑定逻辑
+- 微信二维码扫描创建流程涉及状态流转、错误态、安全控制与绑定逻辑，当前已明确后置到 daemon / channels orchestrator 侧
 
 ## 10. 验收原则
 

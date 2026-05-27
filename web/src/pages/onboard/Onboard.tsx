@@ -35,6 +35,7 @@ import {
 import { t } from '../../lib/i18n';
 import { isLocalModelProviderName } from '../../lib/modelProviders';
 import FieldForm, { type FieldFormHandle } from '../../components/onboard/FieldForm';
+import ChannelSetupGuide from '../../components/onboard/ChannelSetupGuide';
 import SectionPicker from '../../components/onboard/SectionPicker';
 
 // Personality pulls in CodeMirror + markdown rendering (~270KB gzipped).
@@ -1407,8 +1408,11 @@ function OnboardAliasListView({
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm" style={{ color: 'var(--pc-text-secondary)' }}>
-        {typeLabel} — select an existing alias or create one
+        {sectionKey === 'channels' ? t('channels.alias_intro') : `${typeLabel}：先选择已有别名，或创建一个新的配置项。`}
       </p>
+      {sectionKey === 'channels' && isSupportedChannelGuide(typeKey) && (
+        <ChannelSetupGuide channelKey={typeKey} mode="alias" />
+      )}
       <AliasHelpBox what={aliasHelpLabel} />
       {loading ? (
         <div className="flex items-center justify-center py-12">
@@ -1463,7 +1467,7 @@ function OnboardAliasListView({
                 autoFocus={aliases.length === 0}
               />
               <button type="button" onClick={() => void submit()} className="btn-electric text-sm px-3 py-1.5 flex-shrink-0">
-                Create
+                {t('common.create')}
               </button>
             </div>
             {aliasError && (
@@ -1492,13 +1496,10 @@ function AliasHelpBox({ what }: { what: string }) {
       }}
     >
       <p className="mb-1">
-        <strong>{what} alias.</strong> {aliasHelpText(what)}
+        <strong>{what} 别名。</strong> {aliasHelpText(what)}
       </p>
       <p className="mb-0">
-        Rules: lowercase letters, digits, single underscores; 1–63 chars; no
-        leading/trailing/double underscores, no dots, hyphens, or spaces.{' '}
-        <strong>Aliases can’t be renamed in v0.8.0</strong> — pick something
-        you’ll keep, or delete and recreate.
+        {t('config.alias_rules')}
       </p>
     </div>
   );
@@ -1558,8 +1559,7 @@ function OnboardOneTierAliasView({
       <AliasHelpBox what={oneTierAliasHelpLabel(sectionKey)} />
       {sectionKey === 'agents' && (
         <p className="text-sm" style={{ color: 'var(--pc-text-secondary)' }}>
-          Create or choose the agent you want to chat with. The provider and
-          profiles you already configured will be preselected when possible.
+          创建或选择你后续要聊天的智能体。前面已经配置好的提供商和配置文件会在可用时自动预选。
         </p>
       )}
       {error && (
@@ -1608,7 +1608,7 @@ function OnboardOneTierAliasView({
               autoFocus={aliases.length === 0}
             />
             <button type="button" onClick={() => void submit()} className="btn-electric text-sm px-3 py-1.5 flex-shrink-0">
-              Create
+              {t('common.create')}
             </button>
           </div>
           {aliasError && (
@@ -1636,30 +1636,30 @@ function suggestAlias(aliases: string[]): string {
 
 function validateAlias(alias: string): string | null {
   if (/^(?!_)(?!.*__)(?!.*_$)[a-z0-9_]{1,63}$/.test(alias)) return null;
-  return 'Alias must use lowercase letters, digits, or single underscores only; no hyphens, dots, spaces, leading/trailing underscores, or double underscores.';
+  return t('config.alias_invalid');
 }
 
 function aliasHelpText(what: string): string {
   const normalized = what.toLowerCase();
   if (normalized.includes('agent')) {
-    return 'This names the assistant you will chat with. Most first-run setups only need one agent called default.';
+    return '这是你后续要聊天的智能体名称。首次部署通常只需要一个名为 default 的智能体。';
   }
   if (normalized.includes('risk')) {
-    return 'This names a reusable safety profile. Most first-run setups only need default; agents reference it later.';
+    return '这是可复用的安全配置名称。首次部署通常只需要 default，后续由智能体引用。';
   }
   if (normalized.includes('runtime')) {
-    return 'This names a reusable runtime profile for tool limits, timeouts, and agent behavior. Most first-run setups only need default.';
+    return '这是可复用的运行时配置名称，用于工具限制、超时和智能体行为。首次部署通常只需要 default。';
   }
   if (normalized.includes('provider')) {
-    return 'This names one provider credential or endpoint, such as default, work, or local. Agents reference it as provider.alias.';
+    return '这是某个提供商凭据或端点的名称，例如 default、work 或 local。智能体会按 provider.alias 引用它。';
   }
   if (normalized.includes('storage')) {
-    return 'This names one backend instance. Most first-run setups only need one instance called default.';
+    return '这是某个存储后端实例的名称。首次部署通常只需要一个名为 default 的实例。';
   }
   if (normalized.includes('channel')) {
-    return 'This names one channel connection. Agents can reference this channel alias later.';
+    return '这是某个渠道连接的名称。后续智能体可以直接引用这个渠道别名。';
   }
-  return 'This names a reusable config entry. Most first-run setups only need default; add more aliases later when you need multiple entries.';
+  return '这是一个可复用配置项的名称。首次部署通常只需要 default，只有确实需要多份配置时再新增别名。';
 }
 
 function typedAliasHelpLabel(sectionKey: string, typeLabel: string): string {
@@ -1702,6 +1702,10 @@ function oneTierAliasHelpLabel(sectionKey: string): string {
 
 function typedMapPathSegment(sectionKey: string, typeKey: string): string {
   return sectionKey.startsWith('providers.') ? typeKey.replace(/_/g, '-') : typeKey;
+}
+
+function isSupportedChannelGuide(channelKey?: string): channelKey is 'wechat' | 'qq' | 'wecom' {
+  return channelKey === 'wechat' || channelKey === 'qq' || channelKey === 'wecom';
 }
 
 function parseCompleted(v: unknown): string[] {

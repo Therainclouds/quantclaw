@@ -29,6 +29,7 @@ import {
   type SectionInfo,
 } from '../lib/api';
 import FieldForm, { clearFieldFormCatalogCaches } from '../components/onboard/FieldForm';
+import ChannelSetupGuide from '../components/onboard/ChannelSetupGuide';
 import PersonalityEditor from '../components/onboard/PersonalityEditor';
 import SkillsBundleEditor from '../components/onboard/SkillsBundleEditor';
 import ReloadDaemonButton from '../components/onboard/ReloadDaemonButton';
@@ -249,7 +250,7 @@ export default function Config() {
             className="btn-secondary inline-flex items-center gap-2 text-sm px-3 py-1.5 self-start"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            {t('config.back')}
           </button>
           {tabs ? (
             <SectionTabs tabs={tabs} />
@@ -340,7 +341,7 @@ export default function Config() {
             className="btn-secondary inline-flex items-center gap-2 text-sm px-3 py-1.5 self-start"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to {activeSection.label}
+            {t('config.back')} {activeSection.label}
           </button>
           {body}
         </div>
@@ -722,6 +723,10 @@ function AliasListView({
         </p>
       )}
 
+      {sectionKey === 'channels' && isSupportedChannelGuide(typeKey) && (
+        <ChannelSetupGuide channelKey={typeKey} mode="alias" />
+      )}
+
       <ConfigAliasHelpBox />
 
       {error && (
@@ -893,11 +898,11 @@ function sectionTabsForAliasForm(
     const connection = new Set(['api-key', 'uri', 'requires-openai-auth', 'extra-headers']);
     const model = new Set(['model', 'temperature', 'max-tokens', 'top-p', 'timeout-secs']);
     return [
-      { key: 'connection', label: 'Connection', render: () => makeForm((p) => connection.has(leaf(p))) },
+      { key: 'connection', label: t('config.tab.connection'), render: () => makeForm((p) => connection.has(leaf(p))) },
       { key: 'model', label: 'Model', render: () => makeForm((p) => model.has(leaf(p))) },
       {
         key: 'advanced',
-        label: 'Advanced',
+        label: t('config.tab.advanced'),
         render: () => makeForm((p) => !connection.has(leaf(p)) && !model.has(leaf(p))),
       },
     ];
@@ -931,16 +936,20 @@ function sectionTabsForAliasForm(
       'excluded-tools',
     ]);
     return [
-      { key: 'connection', label: 'Connection', render: () => makeForm((p) => connection.has(leaf(p))) },
-      { key: 'behavior', label: 'Behavior', render: () => makeForm((p) => behavior.has(leaf(p))) },
+      { key: 'connection', label: t('config.tab.connection'), render: () => makeForm((p) => connection.has(leaf(p))) },
+      { key: 'behavior', label: t('config.tab.behavior'), render: () => makeForm((p) => behavior.has(leaf(p))) },
       {
         key: 'advanced',
-        label: 'Advanced',
+        label: t('config.tab.advanced'),
         render: () => makeForm((p) => !connection.has(leaf(p)) && !behavior.has(leaf(p))),
       },
     ];
   }
   return null;
+}
+
+function isSupportedChannelGuide(channelKey?: string): channelKey is 'wechat' | 'qq' | 'wecom' {
+  return channelKey === 'wechat' || channelKey === 'qq' || channelKey === 'wecom';
 }
 
 /**
