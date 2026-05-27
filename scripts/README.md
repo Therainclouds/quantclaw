@@ -1,15 +1,18 @@
 # scripts/ — Raspberry Pi Deployment Guide
 
-This directory contains everything needed to cross-compile ZeroClaw and deploy it to a Raspberry Pi over SSH.
+This directory contains everything needed to cross-compile QuantClaw and either deploy it to a Raspberry Pi over SSH or assemble a tarball for manual SCP installation.
 
 ## Contents
 
 | File | Purpose |
 |------|---------|
 | `deploy-rpi.sh` | One-shot cross-compile and deploy script |
+| `package-rpi.sh` | Build a release tarball for manual SCP + on-device install |
 | `rpi-config.toml` | Production config template deployed to `~/.zeroclaw/config.toml` |
 | `zeroclaw.service` | systemd unit file installed on the Pi |
 | `99-act-led.rules` | udev rule for ACT LED sysfs access without sudo |
+| `rpi-install/install.sh` | Installer bundled inside the Raspberry Pi tarball |
+| `rpi-install/quantclaw-rust.service` | systemd unit template bundled inside the Raspberry Pi tarball |
 
 ---
 
@@ -54,6 +57,50 @@ RPI_HOST=raspberrypi.local RPI_USER=pi ./scripts/deploy-rpi.sh
 ```
 
 After the first deploy, you must set your API key on the Pi (see [First-Time Setup](#first-time-setup)).
+
+## Manual SCP Package Flow
+
+If the Pi is only reachable after first-boot Wi-Fi setup, build a tarball locally and copy it across later:
+
+```bash
+./scripts/package-rpi.sh
+```
+
+This produces:
+
+```text
+dist/quantclaw-<version>-aarch64-linux-gnu/
+dist/quantclaw-<version>-aarch64-linux-gnu.tar.gz
+```
+
+The tarball contains:
+
+- `quantclaw`
+- `install.sh`
+- `rpi-config.toml`
+- `quantclaw-rust.service`
+- `web/dist`
+
+Example device-side install:
+
+```bash
+mkdir -p ~/quantclaw_rust_app
+cd ~/quantclaw_rust_app
+tar xzf quantclaw-*.tar.gz
+cd quantclaw-*-aarch64-linux-gnu
+
+sudo QUANTCLAW_USER=quant \
+     QUANTCLAW_APP_ROOT=/home/quant/quantclaw_rust_app \
+     QUANTCLAW_CONFIG_DIR=/home/quant/quantclaw_rust_app/.quantclaw \
+     bash ./install.sh
+```
+
+Validation:
+
+```bash
+curl -sSf http://127.0.0.1:42617/health
+sudo journalctl -u quantclaw-rust -n 80 --no-pager
+```
 
 ---
 

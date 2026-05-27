@@ -1,0 +1,36 @@
+schema_version = 3
+
+[gateway]
+port = 42617
+host = "[::]"
+allow_public_bind = true
+require_pairing = false
+web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
+[providers.models.openrouter.default]
+api_key = ""
+model = "anthropic/claude-sonnet-4-20250514"
+temperature = 0.7
+[agents.default]
+model_provider = "openrouter.default"
+risk_profile = "default"
+runtime_profile = "default"
+[runtime_profiles.default]
+
+[storage.sqlite.default]
+open_timeout_secs = 60
+path = "defaults"
+
+[storage]
+
+[storage.sqlite]
+
+[onboard_state]
+completed_sections = ["providers.models", "risk-profiles", "runtime-profiles", "storage", "memory"]
+
+[risk_profiles.default]
+level = "supervised"
+auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "browser", "browser_open"]
+
+[providers]
+
+[providers.models]

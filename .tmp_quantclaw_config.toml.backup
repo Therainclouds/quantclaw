@@ -1,0 +1,37 @@
+api_key = ""
+default_provider = "openrouter"
+default_model = "anthropic/claude-sonnet-4-20250514"
+default_temperature = 0.7
+
+[gateway]
+port = 42617
+host = "[::]"
+allow_public_bind = true
+require_pairing = false
+web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
+
+[providers.models.minimax.default]
+endpoint = "intl"
+api_key = "enc2:22f59481e8ce707a327e1ac4a550c1826c46d812b26698d6c7a0b569424aade87505c459df94de3e9baeaf38e90acedb2c3ae38950112ee8a56119c85131517ebeea6caab85fb9ee3bfb1957fc506fb6ecafe748ed425917748003aface31e9b395bfaac5d93e5ce86a14b21326ff29776ec20b8653f759830aa8e7adc50397eae1886123b9b448766e0831e558e7e43bee29f6b64bc0be085"
+model = "minimax-m2.7"
+
+[storage.sqlite.default]
+open_timeout_secs = 60
+path = "defaults"
+
+[storage]
+
+[storage.sqlite]
+
+[onboard_state]
+completed_sections = ["providers.models", "risk-profiles", "runtime-profiles", "storage", "memory"]
+
+[risk_profiles.default]
+level = "supervised"
+auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations"]
+
+[providers]
+
+[providers.models]
+
+[providers.models.minimax]

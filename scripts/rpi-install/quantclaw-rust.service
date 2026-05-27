@@ -1,0 +1,19 @@
+[Unit]
+Description=QuantClaw Rust Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__QUANTCLAW_USER__
+SupplementaryGroups=gpio spi i2c
+WorkingDirectory=__QUANTCLAW_APP_DIR__
+ExecStart=/usr/local/bin/quantclaw gateway --config-dir __QUANTCLAW_CONFIG_DIR__
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=__QUANTCLAW_ENV_FILE__
+Environment=RUST_LOG=info
+Environment=HOME=__QUANTCLAW_HOME__
+
+[Install]
+WantedBy=multi-user.target

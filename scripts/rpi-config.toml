@@ -1,9 +1,9 @@
-# ZeroClaw — Raspberry Pi production configuration
+# QuantClaw — Raspberry Pi production configuration
 #
-# Copy this to ~/.zeroclaw/config.toml on the Pi.
+# Copy this to the QuantClaw config directory on the Pi.
 # deploy-rpi.sh does this automatically.
 #
-# API key is loaded from ~/.zeroclaw/.env (EnvironmentFile in systemd).
+# API key is loaded from the QuantClaw .env file (EnvironmentFile in systemd).
 # Set it there as: ANTHROPIC_API_KEY=your-key-here
 # Or set api_key directly below (not recommended for version control).
 
@@ -152,7 +152,7 @@ challenge_max_attempts = 3
 
 [security.estop]
 enabled = false
-state_file = "~/.zeroclaw/estop-state.json"
+state_file = "~/.quantclaw/estop-state.json"
 require_otp_to_resume = true
 
 [security.syscall_anomaly]
@@ -410,7 +410,7 @@ auto_hydrate = true
 sqlite_journal_mode = "wal"
 
 [memory.qdrant]
-collection = "zeroclaw_memories"
+collection = "quantclaw_memories"
 
 [storage.provider.config]
 provider = ""
@@ -422,9 +422,10 @@ tls = false
 provider = "none"
 
 [gateway]
-port = 8080
+port = 42617
 host = "0.0.0.0"
 require_pairing = false
+web_dist_dir = "/usr/local/share/quantclaw/web/dist"
 trusted_ips = ["0.0.0.0/0"]
 allow_public_bind = true
 paired_tokens = []
@@ -470,7 +471,7 @@ enabled = false
 allowed_domains = []
 max_response_size = 1000000
 timeout_secs = 30
-user_agent = "ZeroClaw/1.0"
+user_agent = "QuantClaw/1.0"
 
 [http_request.credential_profiles]
 
@@ -486,7 +487,7 @@ allowed_domains = ["*"]
 blocked_domains = []
 max_response_size = 500000
 timeout_secs = 30
-user_agent = "ZeroClaw/1.0"
+user_agent = "QuantClaw/1.0"
 
 [web_search]
 enabled = false
@@ -497,7 +498,7 @@ timeout_secs = 15
 [proxy]
 enabled = false
 no_proxy = []
-scope = "zeroclaw"
+scope = "quantclaw"
 services = []
 
 [identity]
@@ -605,7 +606,7 @@ max_duration_secs = 120
 
 [agents_ipc]
 enabled = false
-db_path = "~/.zeroclaw/agents.db"
+db_path = "~/.quantclaw/agents.db"
 staleness_secs = 300
 
 [mcp]
